@@ -2,11 +2,11 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <servlet>
         <servlet-name>GreetingServlet</servlet-name>
-        <servlet-class>com.mycompany.servlet.GreetingServlet</servlet-class>
+        <servlet-class>net.grocerypricebook.servlet.GreetingServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ShopListServlet</servlet-name>
-        <servlet-class>com.mycompany.servlet.ShopListServlet</servlet-class>
+        <servlet-class>net.grocerypricebook.servlet.ShopListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GreetingServlet</servlet-name>

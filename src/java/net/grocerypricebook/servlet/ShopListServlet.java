@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.servlet;
+package net.grocerypricebook.servlet;
 
 import Users.Users;
 import java.io.IOException;
