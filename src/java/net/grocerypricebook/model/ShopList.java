@@ -1,4 +1,4 @@
-package shoppingList;
+package net.grocerypricebook.model;
 
 import java.util.ArrayList;
 /**
