@@ -1,0 +1,101 @@
+users
+id, login, pw
+
+categories
+id, name
+
+items
+id, name, category, user
+
+item_subtype
+id, item_id, name, description
+
+item_price_data
+item_id, subtype_id, price, unit_id, date, store_id
+
+base_units
+id, name, description
+
+units
+id, name, base_unit_id, multiplier
+
+stores
+id, name, street address, city, state, zip
+
+shopping_lists
+id, name, user
+
+shopping_list_entries
+id, list_id, item
+
+CREATE TABLE users(
+id INT AUTO_INCREMENT PRIMARY KEY,
+login VARCHAR(20) NOT NULL UNIQUE KEY,
+password VARCHAR(20) NOT NULL
+) ENGINE=innodb;
+
+CREATE TABLE categories(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL UNIQUE KEY
+) ENGINE=innodb;
+
+CREATE TABLE items(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL UNIQUE KEY,
+category_id int(11) NOT NULL,
+FOREIGN KEY(category_id) references categories(id)
+) ENGINE=innodb;
+
+CREATE TABLE item_subtypes(
+id INT AUTO_INCREMENT PRIMARY KEY,
+item_id int(11) NOT NULL,
+name varchar(100) not null,
+description varchar(100),
+foreign key(item_id) references items(id)
+) engine=innodb;
+
+#CREATE TABLE base_units(
+#id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+#name VARCHAR(100) NOT NULL UNIQUE KEY) engine=innodb;
+
+CREATE TABLE units(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name varchar(100) NOT NULL UNIQUE KEY,
+base_unit_id int(11),
+multiplier decimal(10,4) NOT NULL) engine=innodb;
+
+CREATE TABLE grocery_stores(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name varchar(100) not null,
+address varchar(100) not null,
+state varchar(100) not null,
+city varchar(100) not null,
+zip int not null,
+UNIQUE KEY(address, state, city, zip))engine=innodb;
+
+CREATE TABLE item_price_data(
+item_id int(11) NOT NULL,
+subtype_id int(11),
+price DECIMAL(5,2) NOT NULL,
+unit int(11) NOT NULL,
+date DATE NOT NULL,
+store_id int(11) NOT NULL,
+PRIMARY KEY(item_id, subtype_id, date, store_id),
+FOREIGN KEY(item_id) references items(id),
+FOREIGN KEY(subtype_id) references item_subtypes(id),
+FOREIGN KEY(store_id) references grocery_stores(id)) engine=innodb;
+
+CREATE TABLE shopping_lists(
+id int AUTO_INCREMENT PRIMARY KEY,
+user_id int(11),
+name varchar(100),
+FOREIGN KEY(user_id) references users(id))engine=innodb;
+
+CREATE TABLE shopping_list_entries(
+list_id int(11),
+item_id int(11),
+PRIMARY KEY(list_id, item_id),
+FOREIGN KEY(list_id) references shopping_lists(id),
+FOREIGN KEY(item_id) references items(id))engine=innodb;
+
+

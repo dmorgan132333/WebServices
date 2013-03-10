@@ -8,6 +8,10 @@
         <servlet-name>ShopListServlet</servlet-name>
         <servlet-class>net.grocerypricebook.servlet.ShopListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditCategoriesDispatcher</servlet-name>
+        <servlet-class>net.grocerypricebook.servlet.EditCategoriesDispatcher</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GreetingServlet</servlet-name>
         <url-pattern>/GreetingServlet</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>ShopListServlet</servlet-name>
         <url-pattern>/ShopListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCategoriesDispatcher</servlet-name>
+        <url-pattern>/EditCategoriesDispatcher</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

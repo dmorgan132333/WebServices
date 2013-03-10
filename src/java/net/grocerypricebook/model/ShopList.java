@@ -10,11 +10,10 @@ public class ShopList {
     ArrayList<String> slist = new ArrayList<String>();
     double price;
     
-    
-    
     public ShopList(){
         addToList();
     }
+
     public void addToList(){
         slist.add("milk");
         slist.add("cheese");
@@ -23,8 +22,8 @@ public class ShopList {
         slist.add("bread");
         slist.add("chicken");
     }
+
     public ArrayList<String> getList(){
         return slist;
-        
     }
 }
