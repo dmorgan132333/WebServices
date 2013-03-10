@@ -86,12 +86,11 @@ public class Categories {
 		Connection con;
 		Statement stmt;
 		String query;
-		ResultSet rs;
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			query = "UPDATE categories SET name = \""+newName+"\" WHERE id = "+id;
-			rs = stmt.executeQuery(query);
+			stmt.executeUpdate(query);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);
@@ -107,7 +106,7 @@ public class Categories {
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			query = "DELETE FROM categories WHERE id = "+id;
-			rs = stmt.executeQuery(query);
+			stmt.executeUpdate(query);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);

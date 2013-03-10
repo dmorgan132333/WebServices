@@ -14,19 +14,13 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Edit Category</title>
+		<title>Confirm Delete Category</title>
 	</head>
 	<body>
-		<h1>Edit Category: <%= name %></h1>
+		<h1>Delete category: <%= name %> ?</h1>
 		<form action="EditCategory">
-			<table>
-				<tr>
-					<td>New Name: </td>
-					<td><input type="text" name="new_name" /></td>
-				</tr>
-			</table>
 			<input type="hidden" name="cat_id" value="<%= catId %>" />
-			<input type="submit" name="action" value="Submit" />
+			<input type="submit" name="action" value="Delete" />
 			<input type="submit" name="action" value="Cancel" />
 		</form>
 	</body>
