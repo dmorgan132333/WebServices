@@ -14,13 +14,13 @@ import java.util.Properties;
 public class JDBCUtilities {
 	public static String dbms = "mysql";
 	public static String jarFile;
-	public static String dbName = "grocerypricebook";
-	public static String userName = "root";
-	public static String password = "ratm894";
+	public static String dbName = "webserviceshw3";
+	public static String userName = "webserviceshw3";
+	public static String password = "Oswego!1";
 	public static String urlString;
 	
 	private static String driver;
-	private static String serverName = "localhost";
+	private static String serverName = "webserviceshw3.db.10690692.hostedresource.com";
 	private static int portNumber = 3306;
 	private static Properties prop;
 	
@@ -35,19 +35,11 @@ public class JDBCUtilities {
 		Connection conn = null;
 		Properties connectionProps = new Properties();
 		connectionProps.put("user", userName);
-		//connectionProps.put("", password);
+		connectionProps.put("password", password);
 
-		if (dbms.equals("mysql")) {
-			conn = DriverManager.getConnection("jdbc:" + dbms + "://" +serverName +":" + portNumber + "/" + dbName, connectionProps);
-		} else if (dbms.equals("derby")) {
-			conn = DriverManager.getConnection(
-				"jdbc:" + dbms + ":" +
-				dbName +
-				";create=true",
-				connectionProps);
-		}
+		conn = DriverManager.getConnection("jdbc:" + dbms + "://" +serverName +":" + portNumber + "/" + dbName, connectionProps);
 
-			System.out.println("Connected to database");
-			return conn;
+		System.out.println("Connected to database");
+		return conn;
 		}
 }
