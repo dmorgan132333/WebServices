@@ -5,13 +5,12 @@
 package net.grocerypricebook.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.grocerypricebook.model.Categories;
 
 /**
  *
@@ -34,10 +33,20 @@ public class EditCategoriesDispatcher extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
 		System.out.println("cat_id: " + request.getParameter("category_id"));
-		if(request.getParameter("action").equals("Edit"))
+		if(request.getParameter("action").equals("Edit")){
 			dispatch = request.getRequestDispatcher("/WEB-INF/editcat.jsp");
-		else
+		}
+		else if (request.getParameter("action").equals("Delete")){
 			dispatch = request.getRequestDispatcher("/WEB-INF/deletecat.jsp");
+		}
+		else if (request.getParameter("action").equals("Add")){
+			System.out.println("PING!");
+			dispatch = request.getRequestDispatcher("/editcategories.jsp");
+			Categories cat = new Categories();
+			cat.addCategory(request.getParameter("addNewName"));
+		} else {
+			dispatch = request.getRequestDispatcher("/editcategories.jsp");
+		}
 		dispatch.forward(request, response);
 	}
 

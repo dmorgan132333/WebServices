@@ -21,9 +21,14 @@
 			<% for(Map.Entry<Integer,String> entry : cats.getCategories().entrySet() ) { %>
 			<form action="EditCategoriesDispatcher" method="GET">
 				<input type="hidden" name="category_id" value="<%= entry.getKey() %>" />
-				<tr><td><%= entry.getValue() %></td><td><input type="submit" name="action" value="Edit" /></td><td><input type="submit" name="action" value="Delete"<td></tr>
+				<tr><td><%= entry.getValue() %></td><td><input type="submit" name="action" value="Edit" /><input type="submit" name="action" value="Delete"<td></tr>
 			</form>
 			<% } %>
+			<tr><td></br></td></tr>
+
+			<form action="EditCategoriesDispatcher" method="GET">
+			<tr><td>Add new category:</td><td><input type="text" name="addNewName" /><input type="submit" name="action" value="Add"/></td></tr>
+			</form>
 		</table>
 	</body>
 </html>

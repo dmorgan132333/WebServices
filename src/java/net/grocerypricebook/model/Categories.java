@@ -74,7 +74,7 @@ public class Categories {
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			query = "INSERT INTO categories (name) VALUES(\"" + name + "\")";
-			rs = stmt.executeQuery(query);
+			stmt.executeUpdate(query);
 			con.close();
 
 		} catch (SQLException e){
