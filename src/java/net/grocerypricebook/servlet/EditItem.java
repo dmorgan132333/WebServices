@@ -5,19 +5,19 @@
 package net.grocerypricebook.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.grocerypricebook.model.Categories;
+import net.grocerypricebook.model.Items;
 
 /**
  *
  * @author mike
  */
-public class EditCategory extends HttpServlet {
+public class EditItem extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP
@@ -32,16 +32,28 @@ public class EditCategory extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
-		dispatch = request.getRequestDispatcher("/editcategories.jsp");
+		dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
 		//Get the action value
 		String action = request.getParameter("action");
 		if(action.equals("Submit")){
-			Categories cat = new Categories();
-			cat.editCategory(Integer.parseInt(request.getParameter("cat_id")), request.getParameter("new_name"));
+			Items items = new Items();
+			int itemId = Integer.parseInt(request.getParameter("item_id"));
+			String newName = request.getParameter("new_name");
+			int newCatId = Integer.parseInt(request.getParameter("new_cat_id"));
+			try{
+				items.editItem(itemId, newName, newCatId);
+			} catch (SQLException e){
+				System.out.println(e);
+			}
 		} else if(action.equals("Delete")){
-			Categories cat = new Categories();
-			cat.deleteCategory(Integer.parseInt(request.getParameter("cat_id")));
+			Items items = new Items();
+			try{
+				items.deleteItem(Integer.parseInt(request.getParameter("item_id")));
+			} catch (SQLException e){
+				System.out.println(e);
+			}
 		}
 		dispatch.forward(request, response);
 	}

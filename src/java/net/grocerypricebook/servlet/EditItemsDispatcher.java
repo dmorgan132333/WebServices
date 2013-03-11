@@ -5,19 +5,20 @@
 package net.grocerypricebook.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.grocerypricebook.model.Categories;
+import net.grocerypricebook.model.Items;
 
 /**
  *
  * @author mike
  */
-public class EditCategory extends HttpServlet {
+public class EditItemsDispatcher extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP
@@ -33,15 +34,24 @@ public class EditCategory extends HttpServlet {
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
-		dispatch = request.getRequestDispatcher("/editcategories.jsp");
-		//Get the action value
-		String action = request.getParameter("action");
-		if(action.equals("Submit")){
-			Categories cat = new Categories();
-			cat.editCategory(Integer.parseInt(request.getParameter("cat_id")), request.getParameter("new_name"));
-		} else if(action.equals("Delete")){
-			Categories cat = new Categories();
-			cat.deleteCategory(Integer.parseInt(request.getParameter("cat_id")));
+		System.out.println("PING!!!!!!!!!!!!");
+		if(request.getParameter("action").equals("Edit")){
+			dispatch = request.getRequestDispatcher("/WEB-INF/edititems.jsp");
+		}
+		else if (request.getParameter("action").equals("Delete")){
+			dispatch = request.getRequestDispatcher("/WEB-INF/deleteitem.jsp");
+		}
+		else if (request.getParameter("action").equals("Add")){
+			System.out.println("PING!");
+			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
+			Items items = new Items();
+			try{
+				items.addItem(request.getParameter("addNewName"), Integer.parseInt(request.getParameter("cat_id")));
+			} catch (SQLException e){
+				System.out.println(e);
+			}
+		} else {
+			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
 		}
 		dispatch.forward(request, response);
 	}
