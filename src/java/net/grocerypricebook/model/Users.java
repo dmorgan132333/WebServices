@@ -6,56 +6,73 @@ package net.grocerypricebook.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 /**
- *
- * @author Doug
+ * @author Mike Hayes
  */
-
-
-
-public class Users {
-    HashMap<String,String> userID = new HashMap<String,String>();
-    ArrayList<String> sList;
-    HashMap<String,ArrayList<String>> sMap = new HashMap<String,ArrayList<String>>();
-    
+public class Users{
     public Users(){
-        addUsers();
-    }
-    
-    public void addUsers(){
-        userID.put("Doug","Morgan");
-        sList = new ArrayList<String>();
-        sList.add("Milk");
-        sList.add("Eggs");
-        sList.add("Water");
-        sMap.put("Doug", sList);
-        
-        userID.put("Mike","Hayes");
-        sList = new ArrayList<String>();
-        sList.add("Tofu");
-        sList.add("Eggs");
-        sList.add("Water");
-        sMap.put("Mike", sList);
-    }
-    public void addToShopList(String user, String item){
-        ArrayList<String> s = sMap.get(user);
-        s.add(item);
-       System.out.println(item + ", " + user + ", " +s);
-        sMap.put(user, s);
+
     }
 
-    public HashMap getUsersID() {
-       // System.out.println(userID.entrySet());
-        return userID;
+    /**
+     * Adds a username and password combination to the user database.
+     * @author Mike Hayes
+     * @param name The username to add to the database.
+     * @param password The password to associate with the username.
+     */
+    public void addUser(String name, String password) throws SQLException{
+        Connection con;
+        Statement stmt;
+        String query;
+        try{
+            con = JDBCUtilities.getConnection();
+            stmt = con.createStatement(); 
+            query = "INSERT INTO users(login, password) VALUES(\"" + name + "\", \""+password+"\")";
+            stmt.executeUpdate(query);
+            con.close();
+        } catch (SQLException e){
+            System.out.println(e); 
+            throw e;
+        }
     }
-    public HashMap getPassword(){
-        return userID;
-    }
-    public ArrayList<String> getShopList(String user){
-        
-        ArrayList<String> s =sMap.get(user);
-        System.out.println(s);
-        return s;
+
+    /**
+     * Returns true if the username and password match. Returns false if the username was not found or if they did not match.
+     * @author Mike Hayes
+     * @param userName the string of the user's login name
+     * @param password the string of the user's password
+     * @return true if match, false if not matched or if no user with userName was found
+     */
+    public boolean passwordMatch(String userName, String password) throws SQLException{
+        Connection con;
+        Statement stmt;
+        String query;
+        ResultSet rs;
+        try{
+            con = JDBCUtilities.getConnection();
+            stmt = con.createStatement(); 
+            query = "SELECT password FROM users WHERE login = \""+ userName +"\"";
+            rs = stmt.executeQuery(query);
+            //If there are no results (no user with userName found), rs.next() will return false.
+            if(rs.next()){
+                String pw = rs.getString("password");
+                con.close();
+                return password.equals(pw);
+            } else{
+                con.close();
+                return false;
+            }
+
+        } catch (SQLException e){
+            System.out.println(e); 
+            throw e;
+        }
+
     }
 }

@@ -4,7 +4,7 @@
  */
 package net.grocerypricebook.servlet;
 
-import net.grocerypricebook.model.Users;
+import net.grocerypricebook.model.UsersOld;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import net.grocerypricebook.model.ShopList;
  */
 //@WebServlet(name = "ShopListServlet", urlPatterns = {"/ShopListServlet"})
 public class ShopListServlet extends HttpServlet {
-    Users user = new Users();
+    UsersOld user = new UsersOld();
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and

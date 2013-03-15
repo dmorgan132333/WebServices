@@ -42,7 +42,7 @@ public class Items {
 		Statement stmt;
 		String query;
 		ResultSet rs;
-		ArrayList<ArrayList<String>> outterList = new ArrayList();
+		ArrayList<ArrayList<String>> results = new ArrayList();
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
@@ -53,10 +53,10 @@ public class Items {
 				row.add(rs.getString("id"));
 				row.add(rs.getString("name"));
 				row.add(rs.getString("category_id"));
-				outterList.add(row);
+				results.add(row);
 			}
 			con.close();
-			return outterList;
+			return results;
 		} catch (SQLException e){
 			System.out.println(e);
 			throw e;	

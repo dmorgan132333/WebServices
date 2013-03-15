@@ -4,7 +4,7 @@
  */
 package net.grocerypricebook.servlet;
 
-import net.grocerypricebook.model.Users;
+import net.grocerypricebook.model.UsersOld;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class GreetingServlet extends HttpServlet {
           String surname = request.getParameter("surname").toString();
           
           HttpSession session = request.getSession();
-          Users IDCheck = new Users();
+          UsersOld IDCheck = new UsersOld();
 //          System.out.println(IDCheck.getUsers().keySet());
 //          System.out.println(IDCheck.getUsers().containsKey(firstName));
           if(IDCheck.getUsersID().containsKey(firstName)){
