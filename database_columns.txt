@@ -9,19 +9,37 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(100) NOT NULL UNIQUE KEY
 ) ENGINE=innodb;
 
-CREATE TABLE items(
+CREATE TABLE item_types(
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100) NOT NULL UNIQUE KEY,
-category_id int(11) NOT NULL,
-FOREIGN KEY(category_id) references categories(id)
+name VARCHAR(100) NOT NULL UNIQUE KEY
 ) ENGINE=innodb;
 
 CREATE TABLE item_subtypes(
 id INT AUTO_INCREMENT PRIMARY KEY,
-item_id int(11) NOT NULL,
+item_type_id int(11) NOT NULL,
 name varchar(100) not null,
 description varchar(100),
-foreign key(item_id) references items(id)
+foreign key(item_type_id) references item_types(id)
+) engine=innodb;
+
+CREATE TABLE items(
+id INT AUTO_INCREMENT,
+item_type_id INT(11) NOT NULL,
+item_subtype_id INT(11),
+user_id INT(11) NOT NULL,
+PRIMARY KEY(id),
+UNIQUE KEY(user_id, item_type_id, item_subtype_id),
+FOREIGN KEY(item_type_id) REFERENCES item_types(id),
+FOREIGN KEY(item_subtype_id) REFERENCES item_subtypes(id),
+FOREIGN KEY(user_id) REFERENCES users(id)
+) engine=innodb;
+
+CREATE TABLE item_categories(
+item_id INT(11) NOT NULL,
+category_id INT(11) NOT NULL,
+PRIMARY KEY(item_id, category_id),
+FOREIGN KEY(item_id) REFERENCES items(id),
+FOREIGN KEY(category_id) REFERENCES categories(id)
 ) engine=innodb;
 
 CREATE TABLE units(
