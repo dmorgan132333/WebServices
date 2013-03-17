@@ -34,7 +34,6 @@ public class EditItemsDispatcher extends HttpServlet {
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
-		System.out.println("PING!!!!!!!!!!!!");
 		if(request.getParameter("action").equals("Edit")){
 			dispatch = request.getRequestDispatcher("/WEB-INF/edititems.jsp");
 		}

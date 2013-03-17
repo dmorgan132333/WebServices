@@ -1,0 +1,306 @@
+-- phpMyAdmin SQL Dump
+-- version 2.11.11.3
+-- http://www.phpmyadmin.net
+--
+-- Host: 173.201.136.196
+-- Generation Time: Mar 16, 2013 at 09:34 AM
+-- Server version: 5.0.96
+-- PHP Version: 5.1.6
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `webserviceshw4`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` VALUES(1, 'Produce', 1);
+INSERT INTO `categories` VALUES(2, 'Frozen', 1);
+INSERT INTO `categories` VALUES(3, 'Fresh', 1);
+INSERT INTO `categories` VALUES(4, 'Organic', 1);
+INSERT INTO `categories` VALUES(5, 'Dairy', 1);
+INSERT INTO `categories` VALUES(6, 'Meat', 1);
+INSERT INTO `categories` VALUES(7, 'Canned', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grocery_stores`
+--
+
+CREATE TABLE `grocery_stores` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `state` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `zip` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `address` (`address`,`state`,`city`,`zip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `grocery_stores`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items`
+--
+
+CREATE TABLE `items` (
+  `id` int(11) NOT NULL auto_increment,
+  `item_type_id` int(11) NOT NULL,
+  `item_subtype_id` int(11) default NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`item_type_id`,`item_subtype_id`),
+  KEY `item_type_id` (`item_type_id`),
+  KEY `item_subtype_id` (`item_subtype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `items`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_categories`
+--
+
+CREATE TABLE `item_categories` (
+  `item_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY  (`item_id`,`category_id`),
+  KEY `category_id` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `item_categories`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_price_data`
+--
+
+CREATE TABLE `item_price_data` (
+  `item_id` int(11) NOT NULL,
+  `subtype_id` int(11) NOT NULL default '0',
+  `price` decimal(5,2) NOT NULL,
+  `unit` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `store_id` int(11) NOT NULL,
+  PRIMARY KEY  (`item_id`,`subtype_id`,`date`,`store_id`),
+  KEY `subtype_id` (`subtype_id`),
+  KEY `store_id` (`store_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `item_price_data`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_subtypes`
+--
+
+CREATE TABLE `item_subtypes` (
+  `id` int(11) NOT NULL auto_increment,
+  `item_type_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(100) default NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`item_type_id`,`name`),
+  KEY `item_subtypes_ibfk_1` (`item_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `item_subtypes`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_types`
+--
+
+CREATE TABLE `item_types` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`,`user_id`),
+  KEY `item_types_ibfk_1` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `item_types`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shopping_lists`
+--
+
+CREATE TABLE `shopping_lists` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
+  `name` varchar(100) default NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `shopping_lists`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shopping_list_entries`
+--
+
+CREATE TABLE `shopping_list_entries` (
+  `list_id` int(11) NOT NULL default '0',
+  `item_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`list_id`,`item_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `shopping_list_entries`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `units`
+--
+
+CREATE TABLE `units` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL,
+  `base_unit_id` int(11) default NULL,
+  `multiplier` decimal(10,4) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `units`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `login` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `login` (`login`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` VALUES(1, 'admin', 'Oswego!1');
+INSERT INTO `users` VALUES(2, 'mike', 'ratm894');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `categories`
+--
+ALTER TABLE `categories`
+  ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `items`
+--
+ALTER TABLE `items`
+  ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`item_type_id`) REFERENCES `item_types` (`id`),
+  ADD CONSTRAINT `items_ibfk_2` FOREIGN KEY (`item_subtype_id`) REFERENCES `item_subtypes` (`id`),
+  ADD CONSTRAINT `items_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `item_categories`
+--
+ALTER TABLE `item_categories`
+  ADD CONSTRAINT `item_categories_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+  ADD CONSTRAINT `item_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
+
+--
+-- Constraints for table `item_price_data`
+--
+ALTER TABLE `item_price_data`
+  ADD CONSTRAINT `item_price_data_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+  ADD CONSTRAINT `item_price_data_ibfk_2` FOREIGN KEY (`subtype_id`) REFERENCES `item_subtypes` (`id`),
+  ADD CONSTRAINT `item_price_data_ibfk_3` FOREIGN KEY (`store_id`) REFERENCES `grocery_stores` (`id`);
+
+--
+-- Constraints for table `item_subtypes`
+--
+ALTER TABLE `item_subtypes`
+  ADD CONSTRAINT `item_subtypes_ibfk_1` FOREIGN KEY (`item_type_id`) REFERENCES `item_types` (`id`),
+  ADD CONSTRAINT `item_subtypes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `item_types`
+--
+ALTER TABLE `item_types`
+  ADD CONSTRAINT `item_types_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `shopping_lists`
+--
+ALTER TABLE `shopping_lists`
+  ADD CONSTRAINT `shopping_lists_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `shopping_list_entries`
+--
+ALTER TABLE `shopping_list_entries`
+  ADD CONSTRAINT `shopping_list_entries_ibfk_1` FOREIGN KEY (`list_id`) REFERENCES `shopping_lists` (`id`),
+  ADD CONSTRAINT `shopping_list_entries_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`);
+

@@ -14,15 +14,13 @@ import java.util.Properties;
 public class JDBCUtilities {
 	public static String dbms = "mysql";
 	public static String jarFile;
-	public static String dbName = "webserviceshw3";
-	public static String userName = "webserviceshw3";
+	public static String dbName = "webserviceshw4";
+	public static String userName = "webserviceshw4";
 	public static String password = "Oswego!1";
 	public static String urlString;
 	
-	private static String driver;
-	private static String serverName = "webserviceshw3.db.10690692.hostedresource.com";
+	private static String serverName = "webserviceshw4.db.10690692.hostedresource.com";
 	private static int portNumber = 3306;
-	private static Properties prop;
 	
 	public static Connection getConnection() throws SQLException {
 		try {

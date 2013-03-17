@@ -34,10 +34,14 @@ public class Items {
 		} 
 	}*/
 
-	/*Returns all available items.
-	 * The order of the returned rows is <item ID, item name, category ID>
+	/**
+     * Returns all available items. This is a combination of the users items and the administrator's items.
+     * Administrator items act as "default" or "standard" items for all other users.
+     * user_id = 1 is always the admin user.
+     * The first column returned is the item_id.
+     * Any remaining columns are the category_ids of the item.
 	 */
-	public ArrayList<ArrayList<String>> getItems() throws Exception{
+	public ArrayList<ArrayList<String>> getAllItems(int userId) throws Exception{
 		Connection con;
 		Statement stmt;
 		String query;
@@ -46,7 +50,7 @@ public class Items {
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "SELECT * FROM items";
+			query = "SELECT * FROM items WHERE user_id=0 OR user_id="+userId;
 			rs = stmt.executeQuery(query);
 			while(rs.next()){
 				ArrayList<String> row = new ArrayList();

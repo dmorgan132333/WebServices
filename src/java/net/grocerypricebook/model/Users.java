@@ -73,6 +73,26 @@ public class Users{
             System.out.println(e); 
             throw e;
         }
+    }
 
+    public int getUserId(String userName) throws SQLException{
+        Connection con;
+        Statement stmt;
+        String query;
+        ResultSet rs;
+        try{
+            con = JDBCUtilities.getConnection();
+            stmt = con.createStatement(); 
+            query = "SELECT id FROM users WHERE login = \""+ userName +"\"";
+            rs = stmt.executeQuery(query);
+            //If there are no results (no user with userName found), rs.next() will return false.
+            rs.next();
+            int id = rs.getInt("id");
+            con.close();
+            return id;
+        } catch (SQLException e){
+            System.out.println(e); 
+            throw e;
+        }
     }
 }
