@@ -25,9 +25,9 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             Users users = new Users();
             RequestDispatcher dispatch;
+            HttpSession session = request.getSession();
             try{
                 if(users.passwordMatch(username, password)){
-                    HttpSession session = request.getSession();
                     int userId = users.getUserId(username);
                     session.setAttribute("userId", userId);
                     dispatch = request.getRequestDispatcher("welcome.jsp");

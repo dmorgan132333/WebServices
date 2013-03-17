@@ -19,9 +19,9 @@
             Username: <input type="text" name="username"><br />
             Password: <input type="password" name="password"><br /><br />
             <input type="submit" value="Submit">
-                <% if(loginError != null && !(Boolean)loginError){ %>
+                <% if(loginError != null && ((Boolean)loginError).booleanValue()){ %>
                 <font color="red">Username or password incorrect, please try again.</font>
-                <% } %>
+                <% } %> 
         </form>
     </body>
 </html>
