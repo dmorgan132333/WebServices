@@ -10,7 +10,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.grocerypricebook.model.Categories;
+import javax.servlet.http.HttpSession;
+
+import net.grocerypricebook.model.CategoriesManager;
 
 /**
  *
@@ -32,6 +34,7 @@ public class EditCategoriesDispatcher extends HttpServlet {
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
+		HttpSession session = request.getSession(false);
 		if(request.getParameter("action").equals("Edit")){
 			dispatch = request.getRequestDispatcher("/WEB-INF/editcat.jsp");
 		}
@@ -40,8 +43,8 @@ public class EditCategoriesDispatcher extends HttpServlet {
 		}
 		else if (request.getParameter("action").equals("Add")){
 			dispatch = request.getRequestDispatcher("/editcategories.jsp");
-			Categories cat = new Categories();
-			cat.addCategory(request.getParameter("addNewName"));
+			CategoriesManager manager = new CategoriesManager();
+			manager.addCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
 		} else {
 			dispatch = request.getRequestDispatcher("/editcategories.jsp");
 		}

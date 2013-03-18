@@ -4,6 +4,9 @@
  */
 package net.grocerypricebook.model;
 
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
+import java.beans.PropertyVetoException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -21,23 +24,37 @@ public class JDBCUtilities {
 	
 	private static String serverName = "webserviceshw4.db.10690692.hostedresource.com";
 	private static int portNumber = 3306;
+	private static BoneCP connectionPool;
+	
+	private static boolean initialized;
 	
 	public static Connection getConnection() throws SQLException {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Where is your MySQL JDBC Driver?");
-			e.printStackTrace();
+		
+		
+		if(!initialized){
+			try {
+				// load the database driver (make sure this is in your classpath!)
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			BoneCPConfig config = new BoneCPConfig();
+			config.setJdbcUrl("jdbc:" + dbms + "://" +serverName +":" + portNumber + "/" + dbName );
+			config.setUsername(userName); 
+			config.setPassword(password);
+			config.setMinConnectionsPerPartition(5);
+			config.setMaxConnectionsPerPartition(10);
+			config.setPartitionCount(1);
+			connectionPool = new BoneCP(config); // setup the connection pool
+			
+			initialized = true;
+			
+			System.out.println("Connected to database");
+			return connectionPool.getConnection();
+		} else {
+			System.out.println("Connected to database");
+			return connectionPool.getConnection();
 		}
-
-		Connection conn = null;
-		Properties connectionProps = new Properties();
-		connectionProps.put("user", userName);
-		connectionProps.put("password", password);
-
-		conn = DriverManager.getConnection("jdbc:" + dbms + "://" +serverName +":" + portNumber + "/" + dbName, connectionProps);
-
-		System.out.println("Connected to database");
-		return conn;
-		}
+	}
 }

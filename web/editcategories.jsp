@@ -4,10 +4,13 @@
     Author     : mike
 --%>
 
+<%@page import="net.grocerypricebook.model.Category"%>
 <%@page import="java.util.Map"%>
-<%@page import="net.grocerypricebook.model.Categories"%>
+<%@page import="net.grocerypricebook.model.CategoriesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% Categories cats = new Categories(); %>
+<% CategoriesManager manager  = new CategoriesManager(); 
+int userId = (Integer)request.getSession().getAttribute("userId");
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,10 +21,12 @@
 		<h1>View and Edit Item Categories</h1>
 		<table>
 			<tr><td>Category Name</td></td></td></tr>
-			<% for(Map.Entry<Integer,String> entry : cats.getCategories().entrySet() ) { %>
+			<% for(Category category: manager.getCategories(userId) ) { %>
 			<form action="EditCategoriesDispatcher" method="GET">
-				<input type="hidden" name="category_id" value="<%= entry.getKey() %>" />
-				<tr><td><%= entry.getValue() %></td><td><input type="submit" name="action" value="Edit" /><input type="submit" name="action" value="Delete"<td></tr>
+                <input type="hidden" name="category_id" value="<%= category.getCatId() %>" />
+				<tr><td><%= category.getName() %></td>
+                    <td><input type="submit" name="action" value="Edit" /><input type="submit" name="action" value="Delete"><td>
+                </tr>
 			</form>
 			<% } %>
 			<tr><td></br></td></tr>
