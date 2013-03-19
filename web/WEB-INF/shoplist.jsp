@@ -13,8 +13,15 @@
     </head>
     <body>
         <h1>Shopping list</h1>
-        <form action="GreetingServlet" method="POST">
-            <input type="submit" value="Shopping List">
+        <h2><a href="welcome.jsp">Home</a></h2> 
+        
+        <form action="ShopListServlet" method="GET">
+            List Name <input type="text" name="List Name" size="20">
+            <input type="submit" name="delete_list" value="delete list">
+        </form>
+        <form action="ShopListServlet" method="GET">
+            List Name <input type="text" name="List Name" size="20">
+            <input type="submit" name="new_list" value="new list">
         </form>
     </body>
 </html>

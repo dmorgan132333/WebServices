@@ -7,8 +7,10 @@ package net.grocerypricebook.servlet;
 import net.grocerypricebook.model.UsersOld;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,22 +38,54 @@ public class ShopListServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-       String[] itemsChecked = request.getParameterValues("items");
+        ShopList shopL = new ShopList();
+         HttpSession session = request.getSession();
+        int userId = (Integer)session.getAttribute("userId");
+        String name = request.getParameter("List Name");
         
-        HttpSession session = request.getSession();
-        String id = (String)session.getAttribute("firstName");
+        System.out.println("forward to shoplist.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/shoplist.jsp");
+        if(request.getParameter("new_list")!= null){
+            System.out.println("creating new list");
+            try{
+                shopL.addNewList(userId,name);
+            }
+            catch(SQLException e){
+                System.out.println(e);
+            }
+        }else if(request.getParameter("delete_list")!= null){
+            System.out.println("deleting list");
+            try{
+                shopL.deleteList(userId, name);
+            }
+            catch(SQLException e){
+                System.out.println(e);
+            }
+        }else{
+            try{
+               shopL.getList(userId);
+            }
+            catch(SQLException e){
+                System.out.println(e);
+            }
+        }
+        dispatcher.forward(request, response);
+        
+        
+//        String[] itemsChecked = request.getParameterValues("items");
+//        
+//        HttpSession session = request.getSession();
+//        String id = (String)session.getAttribute("firstName");
         
 //        Users user = new Users();
         
         
         
-        if(itemsChecked != null){
-            for(int x = 0;x<itemsChecked.length;x++){
-                user.addToShopList(id,itemsChecked[x]);
-            }
-        }
+//        if(itemsChecked != null){
+//            for(int x = 0;x<itemsChecked.length;x++){
+//                user.addToShopList(id,itemsChecked[x]);
+//            }
+//        }
         
 //        ShopList shoplist = new ShopList();
         
@@ -59,24 +93,10 @@ public class ShopListServlet extends HttpServlet {
 //               if(session.getAttribute("")) {
 //                   
 //               }
-        ArrayList<String> sList = user.getShopList(id);
-//        System.out.println(id +", "+sList +"itemschecked " + itemsChecked[0]);
-        request.setAttribute("shopping list", sList );
-       //request.setAttribute("accountList",accounts);
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ShopList</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ShopList at " + request.getContextPath() + "</h1>");
-            out.println("" + request.getAttribute("shopping list"));
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
+//        ArrayList<String> sList = user.getShopList(id);
+////        System.out.println(id +", "+sList +"itemschecked " + itemsChecked[0]);
+//        request.setAttribute("shopping list", sList );
+       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
