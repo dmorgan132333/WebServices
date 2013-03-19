@@ -14,6 +14,7 @@
     <body>
         <h1>Shopping list</h1>
         <h2><a href="welcome.jsp">Home</a></h2> 
+        <h2>just making an update</h2>
         
         <form action="ShopListServlet" method="GET">
             List Name <input type="text" name="List Name" size="20">
