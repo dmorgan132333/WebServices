@@ -2,10 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.grocerypricebook.model;
+package net.grocerypricebook.model.dbmanagers;
 
 import java.sql.*;
 import java.util.ArrayList;
+import net.grocerypricebook.model.Category;
+import net.grocerypricebook.model.Category.CategoryType;
+import net.grocerypricebook.model.JDBCUtilities;
 
 import net.grocerypricebook.model.exceptions.CategoryNotFoundException;
 
@@ -46,6 +49,50 @@ public class CategoriesManager {
 		} 
 	}
 
+	public ArrayList<Category> getBasicCategories(int userId) throws Exception{
+		Connection con;
+		ArrayList<Category> categories = new ArrayList<Category>();
+		Statement stmt;
+		String query;
+		ResultSet rs;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "SELECT id,user_id,name FROM categories WHERE type = \"basic\" AND (user_id = 1 OR user_id ="+userId+") ORDER BY name";
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				categories.add(new Category(rs.getInt("id"), rs.getInt("user_id"), rs.getString("name"), CategoryType.BASIC));
+			}
+			con.close();
+			return categories;
+		} catch (SQLException e){
+			System.out.println(e);
+			throw e;
+		}
+	} 
+
+	public ArrayList<Category> getOtherCategories(int userId) throws Exception{
+		Connection con;
+		ArrayList<Category> categories = new ArrayList<Category>();
+		Statement stmt;
+		String query;
+		ResultSet rs;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "SELECT id,user_id,name FROM categories WHERE type = \"other\" AND (user_id = 1 OR user_id ="+userId+") ORDER BY name";
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				categories.add(new Category(rs.getInt("id"), rs.getInt("user_id"), rs.getString("name"), CategoryType.OTHER));
+			}
+			con.close();
+			return categories;
+		} catch (SQLException e){
+			System.out.println(e);
+			throw e;
+		}
+	} 
+
     public Category getCategory(int catId) throws SQLException, CategoryNotFoundException{
         Connection con;
 		Statement stmt;
@@ -71,7 +118,7 @@ public class CategoriesManager {
 		} 
     }
 
-	public String getCategoryName(int id) throws Exception{
+	public String getCategoryName(int id) throws SQLException, CategoryNotFoundException{
 		Connection con;
 		Statement stmt;
 		String query;
@@ -82,10 +129,12 @@ public class CategoriesManager {
 			stmt = con.createStatement();
 			query = "SELECT name FROM categories WHERE id = " + id;
 			rs = stmt.executeQuery(query);
-			rs.next();
-			name = rs.getString("name");
-			con.close();
-			return name;
+			if(rs.next()){
+				name = rs.getString("name");
+				con.close();
+				return name;
+			} else
+				throw new CategoryNotFoundException("Category with id: " + id + " not found.");
 		} catch (SQLException e){
 			System.out.println(e);
 			throw e;
@@ -107,6 +156,38 @@ public class CategoriesManager {
 			System.out.println(e);
 		} 
 	}
+
+	public void addBasicCategory(String name, int userId){
+		Connection con;
+		Statement stmt;
+		String query;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "INSERT INTO categories (name,user_id,type) VALUES(\"" + name + "\", "+userId+", \"basic\")";
+			stmt.executeUpdate(query);
+			con.close();
+
+		} catch (SQLException e){
+			System.out.println(e);
+		} 
+	}
+	public void addOtherCategory(String name, int userId){
+		Connection con;
+		Statement stmt;
+		String query;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "INSERT INTO categories (name,user_id,type) VALUES(\"" + name + "\", "+userId+", \"other\")";
+			stmt.executeUpdate(query);
+			con.close();
+
+		} catch (SQLException e){
+			System.out.println(e);
+		} 
+	}
+
 
 	public void editCategory(int id, String newName){
 		Connection con;

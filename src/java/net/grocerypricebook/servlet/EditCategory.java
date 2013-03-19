@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.grocerypricebook.model.CategoriesManager;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
 import net.grocerypricebook.model.Category;
 import net.grocerypricebook.model.exceptions.CategoryNotFoundException;
 
@@ -23,7 +23,7 @@ import net.grocerypricebook.model.exceptions.CategoryNotFoundException;
  * TODO: Handle case where userId != category's userId.
  */
 public class EditCategory extends HttpServlet {
-
+	
 	/**
 	 * Processes requests for both HTTP
 	 * <code>GET</code> and
@@ -41,30 +41,30 @@ public class EditCategory extends HttpServlet {
 		dispatch = request.getRequestDispatcher("/editcategories.jsp");
 		//Get the action value
 		String action = request.getParameter("action");
-        int catId = Integer.parseInt(request.getParameter("cat_id"));
-        int userId = (Integer)request.getSession().getAttribute("userId");
-        CategoriesManager manager = new CategoriesManager();
-        try{
-        Category category = manager.getCategory(catId);
-        if(userId == category.getUserId()){
-            if(action.equals("Submit")){
-                manager.editCategory(Integer.parseInt(request.getParameter("cat_id")), request.getParameter("new_name"));
-            } else if(action.equals("Delete")){
-                manager.deleteCategory(Integer.parseInt(request.getParameter("cat_id")));
-            }
-        } else {
-            System.out.println("Cannot edit category because it does not belong to user.");
-        }
-		dispatch.forward(request, response);
-        } catch (SQLException e) {
-            System.out.println(e); 
-        } catch (CategoryNotFoundException e){
-            PrintWriter out = response.getWriter();
-            out.write(e.toString());
-            out.close();
-        }
+		int catId = Integer.parseInt(request.getParameter("cat_id"));
+		int userId = (Integer)request.getSession().getAttribute("userId");
+		CategoriesManager manager = new CategoriesManager();
+		try{
+			Category category = manager.getCategory(catId);
+			if(userId == category.getUserId()){
+				if(action.equals("Submit")){
+					manager.editCategory(Integer.parseInt(request.getParameter("cat_id")), request.getParameter("new_name"));
+				} else if(action.equals("Delete")){
+					manager.deleteCategory(Integer.parseInt(request.getParameter("cat_id")));
+				}
+			} else {
+				System.out.println("Cannot edit category " + catId + " because it does not belong to user " + userId +".");
+			}
+			dispatch.forward(request, response);
+		} catch (SQLException e) {
+			System.out.println(e);
+		} catch (CategoryNotFoundException e){
+			PrintWriter out = response.getWriter();
+			out.write(e.toString());
+			out.close();
+		}
 	}
-
+	
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 	/**
 	 * Handles the HTTP
@@ -80,7 +80,7 @@ public class EditCategory extends HttpServlet {
 		throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP
 	 * <code>POST</code> method.
@@ -95,7 +95,7 @@ public class EditCategory extends HttpServlet {
 		throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

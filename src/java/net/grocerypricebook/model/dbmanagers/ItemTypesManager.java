@@ -2,62 +2,40 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.grocerypricebook.model;
+package net.grocerypricebook.model.dbmanagers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
+import net.grocerypricebook.model.ItemType;
+import net.grocerypricebook.model.JDBCUtilities;
 
 /**
  *
  * @author mike
  */
-public class Items {
-	/* TODO: Implement this method.
-	public Map<Integer, String> getItemsInCategory(int categoryId){
-		Connection con;
-		Statement stmt;
-		String query;
-		ResultSet rs;
-		try{
-			con = JDBCUtilities.getConnection();
-			stmt = con.createStatement();
-			query = "INSERT INTO categories (name) VALUES(\"" + name + "\")";
-			rs = stmt.executeQuery(query);
-			con.close();
-
-		} catch (SQLException e){
-			System.out.println(e);
-		} 
-	}*/
-
+public class ItemTypesManager {
 	/**
-     * Returns all available items. This is a combination of the users items and the administrator's items.
-     * Administrator items act as "default" or "standard" items for all other users.
-     * user_id = 1 is always the admin user.
-     * The first column returned is the item_id.
-     * Any remaining columns are the category_ids of the item.
+	     * Returns all available item types. This is a combination of the users item types and the administrator's item types.
+	     * Administrator items act as "default" or "standard" items for all other users.
+	     * user_id = 1 is always the admin user.
 	 */
-	public ArrayList<ArrayList<String>> getAllItems(int userId) throws Exception{
+	public ArrayList<ItemType> getAllItemTypes(int userId) throws Exception{
 		Connection con;
 		Statement stmt;
 		String query;
 		ResultSet rs;
-		ArrayList<ArrayList<String>> results = new ArrayList();
+		ArrayList<ItemType> results = new ArrayList<ItemType>();
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "SELECT * FROM items WHERE user_id=0 OR user_id="+userId;
+			query = "SELECT * FROM item_types WHERE user_id=1 OR user_id="+userId;
+			System.out.println("Query: " + query);
 			rs = stmt.executeQuery(query);
 			while(rs.next()){
-				ArrayList<String> row = new ArrayList();
-				row.add(rs.getString("id"));
-				row.add(rs.getString("name"));
-				row.add(rs.getString("category_id"));
-				results.add(row);
+				results.add(new ItemType(rs.getInt("id"), rs.getInt("user_id"), rs.getString("name"), rs.getInt("base_cat_id")));
 			}
 			con.close();
 			return results;
@@ -67,7 +45,7 @@ public class Items {
 		}
 	}
 
-	public void addItem(String name, int categoryId) throws SQLException{
+	public void addItemType(String name, int userId, int categoryId) throws SQLException{
 		Connection con;
 		Statement stmt;
 		String query;
@@ -76,7 +54,7 @@ public class Items {
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "INSERT INTO items(name, category_id) VALUES(\"" + name + "\", " + categoryId + ")";
+			query = "INSERT INTO item_types(name, user_id, base_cat_id) VALUES(\"" + name + "\", "+ userId + ", " + categoryId + ")";
 			stmt.executeUpdate(query);
 			con.close();
 		} catch (SQLException e){

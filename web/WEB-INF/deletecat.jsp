@@ -4,7 +4,7 @@
     Author     : mike
 --%>
 
-<%@page import="net.grocerypricebook.model.CategoriesManager"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.CategoriesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <% CategoriesManager manager = new CategoriesManager(); 
@@ -18,7 +18,7 @@
 	</head>
 	<body>
 		<h1>Delete category: <%= name %> ?</h1>
-		<form action="EditCategory">
+		<form action="EditCategory" method="POST">
 			<input type="hidden" name="cat_id" value="<%= catId %>" />
 			<input type="submit" name="action" value="Delete" />
 			<input type="submit" name="action" value="Cancel" />

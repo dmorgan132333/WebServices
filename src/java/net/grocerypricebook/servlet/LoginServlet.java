@@ -4,7 +4,7 @@
  */
 package net.grocerypricebook.servlet;
 
-import net.grocerypricebook.model.Users;
+import net.grocerypricebook.model.dbmanagers.UsersManager;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            Users users = new Users();
+            UsersManager users = new UsersManager();
             RequestDispatcher dispatch;
             HttpSession session = request.getSession();
             try{

@@ -4,14 +4,15 @@
     Author     : mike
 --%>
 
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="net.grocerypricebook.model.Categories"%>
+<%@page import="net.grocerypricebook.model.Category"%>
+<%@page import="net.grocerypricebook.model.ItemType"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="net.grocerypricebook.model.Items"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.CategoriesManager"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% Items items = new Items(); %>
-<% HashMap<Integer, String> categories = (HashMap<Integer, String>) new Categories().getCategories(); %>
+<% ItemTypesManager typesManager = new ItemTypesManager(); 
+   CategoriesManager categoriesManager = new CategoriesManager();
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -20,31 +21,33 @@
 	</head>
 	<body>
 		<h1>Edit Item Types</h1>
+		<h2><a href="welcome.jsp">Home</a></h2>
 		<table>
-			<tr><td>Name</td><td>Category</td></td></tr>
-			<% for(ArrayList<String> row:  items.getItems() ) { %>
+			<tr>
+				<td>Name</td>
+				<td>Basic Category</td>
+				</td>
+			</tr>
+			<% for(ItemType itemType : typesManager.getAllItemTypes((Integer)session.getAttribute("userId")) ) { %>
 			<form action="EditItemsDispatcher" method="GET">
-				<input type="hidden" name="item_id" value="<%= row.get(0) %>" />
-				<tr><td><%= row.get(1) %></td>
+				<input type="hidden" name="item_type_id" value="<%= itemType.getId() %>" />
+				<tr><td><%= itemType.getName() %></td>
 					<td>
-						<% for(Map.Entry<Integer, String> catMap : categories.entrySet()){ 
-							if(catMap.getKey() == Integer.parseInt(row.get(2)))
-								out.println(categories.get(Integer.parseInt(row.get(2))));
-						   }
-						%>
+						<%= categoriesManager.getCategoryName(itemType.getBaseCategoryId()) %>
 					</td>
 					<td><input type="submit" name="action" value="Edit" /><input type="submit" name="action" value="Delete"<td></tr>
 			</form>
 			<% } %>
 			<tr><td></br></td></tr>
 
-			<form action="EditItemsDispatcher" method="GET">
+			<form action="EditItemsDispatcher" method="POST">
 			<tr>
 				<td>Add new item type:</td>
 				<td><input type="text" name="addNewName" />
 					<select name="cat_id">
-						<% for(Map.Entry<Integer, String> catMap : categories.entrySet()){
-							out.println("<option value="+ catMap.getKey() +">"+ catMap.getValue() +"</option>");
+						<option>Select basic category</option>
+						<% for(Category category : categoriesManager.getBasicCategories((Integer)session.getAttribute("userId"))){
+							out.println("<option value="+ category.getCatId() +">"+ category.getName() +"</option>");
 						   }
 						%>
 					</select>

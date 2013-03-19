@@ -11,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.grocerypricebook.model.Items;
+import net.grocerypricebook.model.dbmanagers.ItemTypesManager;
 
 /**
  *
@@ -38,7 +38,7 @@ public class EditItem extends HttpServlet {
 		//Get the action value
 		String action = request.getParameter("action");
 		if(action.equals("Submit")){
-			Items items = new Items();
+			ItemTypesManager items = new ItemTypesManager();
 			int itemId = Integer.parseInt(request.getParameter("item_id"));
 			String newName = request.getParameter("new_name");
 			int newCatId = Integer.parseInt(request.getParameter("new_cat_id"));
@@ -48,7 +48,7 @@ public class EditItem extends HttpServlet {
 				System.out.println(e);
 			}
 		} else if(action.equals("Delete")){
-			Items items = new Items();
+			ItemTypesManager items = new ItemTypesManager();
 			try{
 				items.deleteItem(Integer.parseInt(request.getParameter("item_id")));
 			} catch (SQLException e){

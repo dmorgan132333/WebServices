@@ -4,12 +4,12 @@
     Author     : mike
 --%>
 
-<%@page import="net.grocerypricebook.model.Categories"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.CategoriesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<% Categories cat = new Categories(); 
+<% CategoriesManager manager = new CategoriesManager(); 
    int catId = Integer.valueOf(request.getParameter("category_id"));
-   String name = cat.getCategoryName(catId);
+   String name = manager.getCategoryName(catId);
 %>
 <html>
 	<head>
@@ -18,7 +18,7 @@
 	</head>
 	<body>
 		<h1>Edit Category: <%= name %></h1>
-		<form action="EditCategory">
+		<form action="EditCategory" method="POST">
 			<table>
 				<tr>
 					<td>New Name: </td>

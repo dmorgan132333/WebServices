@@ -11,8 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.grocerypricebook.model.Categories;
-import net.grocerypricebook.model.Items;
+import javax.servlet.http.HttpSession;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
+import net.grocerypricebook.model.dbmanagers.ItemTypesManager;
 
 /**
  *
@@ -34,6 +35,7 @@ public class EditItemsDispatcher extends HttpServlet {
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
+		HttpSession session = request.getSession(false);
 		if(request.getParameter("action").equals("Edit")){
 			dispatch = request.getRequestDispatcher("/WEB-INF/edititems.jsp");
 		}
@@ -41,11 +43,10 @@ public class EditItemsDispatcher extends HttpServlet {
 			dispatch = request.getRequestDispatcher("/WEB-INF/deleteitem.jsp");
 		}
 		else if (request.getParameter("action").equals("Add")){
-			System.out.println("PING!");
 			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
-			Items items = new Items();
+			ItemTypesManager items = new ItemTypesManager();
 			try{
-				items.addItem(request.getParameter("addNewName"), Integer.parseInt(request.getParameter("cat_id")));
+				items.addItemType(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"), Integer.parseInt(request.getParameter("cat_id")));
 			} catch (SQLException e){
 				System.out.println(e);
 			}

@@ -10,7 +10,7 @@
 
         Enter price information</br></br>
         View and edit items.</br>
-        View and edit item types and subtypes.</br>
+        <a href="edititemtypes.jsp">View and edit item types and subtypes.</a></br>
         <a href="editcategories.jsp">View and edit item categories.</a></br></br>
         View and edit shopping lists.
         

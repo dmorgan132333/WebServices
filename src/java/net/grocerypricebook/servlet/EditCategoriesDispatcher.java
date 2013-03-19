@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.grocerypricebook.model.CategoriesManager;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
 
 /**
  *
@@ -35,17 +35,23 @@ public class EditCategoriesDispatcher extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
 		HttpSession session = request.getSession(false);
-		if(request.getParameter("action").equals("Edit")){
+		if(request.getParameter("edit") != null){
 			dispatch = request.getRequestDispatcher("/WEB-INF/editcat.jsp");
 		}
-		else if (request.getParameter("action").equals("Delete")){
+		else if (request.getParameter("delete") != null){
 			dispatch = request.getRequestDispatcher("/WEB-INF/deletecat.jsp");
 		}
-		else if (request.getParameter("action").equals("Add")){
+		else if (request.getParameter("add_basic") != null){
 			dispatch = request.getRequestDispatcher("/editcategories.jsp");
 			CategoriesManager manager = new CategoriesManager();
-			manager.addCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
-		} else {
+			manager.addBasicCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
+		} 
+		else if (request.getParameter("add_other") != null){
+			dispatch = request.getRequestDispatcher("/editcategories.jsp");
+			CategoriesManager manager = new CategoriesManager();
+			manager.addOtherCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
+		} 
+		else {
 			dispatch = request.getRequestDispatcher("/editcategories.jsp");
 		}
 		dispatch.forward(request, response);

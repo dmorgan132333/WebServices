@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.grocerypricebook.model;
+package net.grocerypricebook.model.dbmanagers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,13 +10,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import net.grocerypricebook.model.JDBCUtilities;
 
 
 /**
  * @author Mike Hayes
  */
-public class Users{
-    public Users(){
+public class UsersManager{
+    public UsersManager(){
 
     }
 
