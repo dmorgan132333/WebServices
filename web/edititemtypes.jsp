@@ -29,7 +29,7 @@
 				</td>
 			</tr>
 			<% for(ItemType itemType : typesManager.getAllItemTypes((Integer)session.getAttribute("userId")) ) { %>
-			<form action="EditItemsDispatcher" method="GET">
+			<form action="EditItemTypesDispatcher" method="GET">
 				<input type="hidden" name="item_type_id" value="<%= itemType.getId() %>" />
 				<tr><td><%= itemType.getName() %></td>
 					<td>
@@ -40,7 +40,7 @@
 			<% } %>
 			<tr><td></br></td></tr>
 
-			<form action="EditItemsDispatcher" method="POST">
+			<form action="EditItemTypesDispatcher" method="POST">
 			<tr>
 				<td>Add new item type:</td>
 				<td><input type="text" name="addNewName" />
