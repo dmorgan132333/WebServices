@@ -4,6 +4,8 @@
     Author     : mike
 --%>
 
+<%@page import="net.grocerypricebook.model.ItemSubType"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.ItemSubTypesManager"%>
 <%@page import="net.grocerypricebook.model.Category"%>
 <%@page import="net.grocerypricebook.model.ItemType"%>
 <%@page import="java.util.ArrayList"%>
@@ -11,7 +13,9 @@
 <%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% ItemTypesManager typesManager = new ItemTypesManager(); 
+   ItemSubTypesManager subTypesManager = new ItemSubTypesManager();
    CategoriesManager categoriesManager = new CategoriesManager();
+   int userId = (Integer)session.getAttribute("userId");
 %>
 <!DOCTYPE html>
 <html>
@@ -22,20 +26,33 @@
 	<body>
 		<h1>Edit Item Types</h1>
 		<h2><a href="welcome.jsp">Home</a></h2>
+		<style type="text/css">
+			td.subtype{
+				padding-left: 20px;
+				column-span: 2;
+			}
+		</style>
 		<table>
 			<tr>
 				<td>Name</td>
 				<td>Basic Category</td>
 				</td>
 			</tr>
-			<% for(ItemType itemType : typesManager.getAllItemTypes((Integer)session.getAttribute("userId")) ) { %>
+			<% for(ItemType itemType : typesManager.getAllItemTypes(userId) ) { %>
 			<form action="EditItemTypesDispatcher" method="GET">
 				<input type="hidden" name="item_type_id" value="<%= itemType.getId() %>" />
 				<tr><td><%= itemType.getName() %></td>
 					<td>
 						<%= categoriesManager.getCategoryName(itemType.getBaseCategoryId()) %>
 					</td>
-					<td><input type="submit" name="action" value="Edit" /><input type="submit" name="action" value="Delete"<td></tr>
+					<td><input type="submit" name="edit" value="Edit" /><input type="submit" name="delete" value="Delete"<td>
+					<td>&nbsp;&nbsp;<input type="submit" name="edit_subtypes" value="Manage Subtypes"/></td>
+				</tr>
+				<% for(ItemSubType subType: subTypesManager.getItemSubTypes(itemType.getId(), userId)) { 	%>
+				<tr>
+					<td class="subtype"><%= subType.getName() %></td>
+				</tr>
+				<% } %>
 			</form>
 			<% } %>
 			<tr><td></br></td></tr>
@@ -51,7 +68,7 @@
 						   }
 						%>
 					</select>
-					<input type="submit" name="action" value="Add"/>
+					<input type="submit" name="add" value="Add"/>
 				</td>
 			</tr>
 			</form>

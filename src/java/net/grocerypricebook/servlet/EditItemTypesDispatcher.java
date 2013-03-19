@@ -36,13 +36,16 @@ public class EditItemTypesDispatcher extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
 		HttpSession session = request.getSession(false);
-		if(request.getParameter("action").equals("Edit")){
+		if(request.getParameter("edit")!= null){
 			dispatch = request.getRequestDispatcher("/WEB-INF/edititems.jsp");
 		}
-		else if (request.getParameter("action").equals("Delete")){
+		else if (request.getParameter("delete") != null){
 			dispatch = request.getRequestDispatcher("/WEB-INF/deleteitem.jsp");
 		}
-		else if (request.getParameter("action").equals("Add")){
+		else if (request.getParameter("edit_subtypes") != null){
+			dispatch = request.getRequestDispatcher("/edititemsubtypes.jsp");
+		}
+		else if (request.getParameter("add") != null){
 			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
 			ItemTypesManager items = new ItemTypesManager();
 			try{

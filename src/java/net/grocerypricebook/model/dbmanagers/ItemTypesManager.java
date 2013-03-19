@@ -28,7 +28,7 @@ public class ItemTypesManager {
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "SELECT * FROM item_types WHERE user_id=1 OR user_id="+userId+" ORDER BY name";
+			query = "SELECT * FROM item_types WHERE (user_id=1 OR user_id="+userId+") ORDER BY name";
 			rs = stmt.executeQuery(query);
 			while(rs.next()){
 				results.add(new ItemType(rs.getInt("id"), rs.getInt("user_id"), rs.getString("name"), rs.getInt("base_cat_id")));

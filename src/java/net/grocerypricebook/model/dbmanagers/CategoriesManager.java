@@ -28,7 +28,7 @@ public class CategoriesManager {
      */
 	public ArrayList<Category> getCategories(int userId) throws Exception{
 		Connection con;
-        ArrayList<Category> categories = new ArrayList<Category>();
+		ArrayList<Category> categories = new ArrayList<Category>();
 		Statement stmt;
 		String query;
 		ResultSet rs;
