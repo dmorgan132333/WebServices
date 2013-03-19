@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import net.grocerypricebook.model.dbmanagers.CategoriesManager;
 import net.grocerypricebook.model.dbmanagers.ItemTypesManager;
 
 /**
  *
  * @author mike
  */
-public class EditItemsDispatcher extends HttpServlet {
+public class EditItemType extends HttpServlet {
+	private HttpSession HttpSession;
 
 	/**
 	 * Processes requests for both HTTP
@@ -34,24 +34,29 @@ public class EditItemsDispatcher extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
 		HttpSession session = request.getSession(false);
-		if(request.getParameter("action").equals("Edit")){
-			dispatch = request.getRequestDispatcher("/WEB-INF/edititems.jsp");
-		}
-		else if (request.getParameter("action").equals("Delete")){
-			dispatch = request.getRequestDispatcher("/WEB-INF/deleteitem.jsp");
-		}
-		else if (request.getParameter("action").equals("Add")){
-			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
-			ItemTypesManager items = new ItemTypesManager();
+		ItemTypesManager itemTypeManager = new ItemTypesManager();
+		dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
+		//Get the action value
+		String action = request.getParameter("action");
+		int userId = (Integer)session.getAttribute("userId");
+		int itemId = Integer.parseInt(request.getParameter("item_type_id"));
+		if(action.equals("Submit")){
+			String newName = request.getParameter("new_name");
+			int newBaseCatId = Integer.parseInt(request.getParameter("new_base_cat_id"));
 			try{
-				items.addItemType(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"), Integer.parseInt(request.getParameter("cat_id")));
+				itemTypeManager.editItemType(itemId, userId, newName, newBaseCatId);
 			} catch (SQLException e){
 				System.out.println(e);
 			}
-		} else {
-			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
+		} else if(action.equals("Delete")){
+			try{
+				itemTypeManager.deleteItemType(itemId, userId);
+			} catch (SQLException e){
+				System.out.println(e);
+			}
 		}
 		dispatch.forward(request, response);
 	}

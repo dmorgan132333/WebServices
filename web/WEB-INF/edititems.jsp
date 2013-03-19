@@ -4,19 +4,21 @@
     Author     : mike
 --%>
 
+<%@page import="net.grocerypricebook.model.Category"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
-<%@page import="net.grocerypricebook.model.Items"%>
-<%@page import="net.grocerypricebook.model.Categories"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.CategoriesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<% Categories cat = new Categories(); 
-   Items items = new Items();
+<% CategoriesManager categoriesManager = new CategoriesManager(); 
+   ItemTypesManager itemTypesManager = new ItemTypesManager();
 
-   Map<Integer, String> categories = cat.getCategories();
-   int itemId = Integer.parseInt(request.getParameter("item_id"));
-   int catId = items.getItemCategory(itemId);
-   String catName = cat.getCategoryName(catId);
-   String name = items.getItemName(itemId);
+   int itemTypeId = Integer.parseInt(request.getParameter("item_type_id"));
+   int catId = itemTypesManager.getBaseCategory(itemTypeId);
+   String catName = categoriesManager.getCategoryName(catId);
+   String name = itemTypesManager.getItemTypeName(itemTypeId);
+   ArrayList<Category> basicCategories = categoriesManager.getBasicCategories((Integer)session.getAttribute("userId"));
 %>
 <html>
 	<head>
@@ -25,15 +27,16 @@
 	</head>
 	<body>
 		<h1>Edit Item: <%= name %></h1>
-		<form action="EditItem">
+		<form action="EditItemType">
 			<table>
 				<tr>
 					<td>New Name: </td>
 					<td><input type="text" name="new_name" /></td>
 					<td>
-					<select name="new_cat_id">
-						<% for(Map.Entry<Integer, String> catMap : categories.entrySet()){
-							out.println("<option value="+ catMap.getKey() +">"+ catMap.getValue() +"</option>");
+					<select name="new_base_cat_id">
+						<option>Select Base Category</option>
+						<% for(Category category : basicCategories){
+							out.println("<option value="+ category.getCatId() +">"+ category.getName() +"</option>");
 						   }
 						%>
 					</select>
@@ -41,7 +44,7 @@
 
 				</tr>
 			</table>
-			<input type="hidden" name="item_id" value="<%= itemId %>" />
+			<input type="hidden" name="item_type_id" value="<%= itemTypeId %>" />
 			<input type="submit" name="action" value="Submit" />
 			<input type="submit" name="action" value="Cancel" />
 		</form>

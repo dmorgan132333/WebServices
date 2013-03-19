@@ -4,13 +4,13 @@
     Author     : mike
 --%>
 
-<%@page import="net.grocerypricebook.model.Items"%>
+<%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <% 
-   Items items = new Items();
-   int itemId = Integer.parseInt(request.getParameter("item_id"));
-   String name = items.getItemName(itemId);
+   ItemTypesManager manager = new ItemTypesManager();
+   int itemTypeId = Integer.parseInt(request.getParameter("item_type_id"));
+   String name = manager.getItemTypeName(itemTypeId);
 %>
 <html>
 	<head>
@@ -19,8 +19,8 @@
 	</head>
 	<body>
 		<h1>Delete item: <%= name %> ?</h1>
-		<form action="EditItem">
-			<input type="hidden" name="item_id" value="<%= itemId %>" />
+		<form action="EditItemType">
+			<input type="hidden" name="item_type_id" value="<%= itemTypeId %>" />
 			<input type="submit" name="action" value="Delete" />
 			<input type="submit" name="action" value="Cancel" />
 		</form>

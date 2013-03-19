@@ -11,13 +11,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
 import net.grocerypricebook.model.dbmanagers.ItemTypesManager;
 
 /**
  *
  * @author mike
  */
-public class EditItem extends HttpServlet {
+public class EditItemTypesDispatcher extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP
@@ -32,28 +34,24 @@ public class EditItem extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		response.setContentType("text/html;charset=UTF-8");
 		RequestDispatcher dispatch;
-		dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
-		//Get the action value
-		String action = request.getParameter("action");
-		if(action.equals("Submit")){
+		HttpSession session = request.getSession(false);
+		if(request.getParameter("action").equals("Edit")){
+			dispatch = request.getRequestDispatcher("/WEB-INF/edititems.jsp");
+		}
+		else if (request.getParameter("action").equals("Delete")){
+			dispatch = request.getRequestDispatcher("/WEB-INF/deleteitem.jsp");
+		}
+		else if (request.getParameter("action").equals("Add")){
+			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
 			ItemTypesManager items = new ItemTypesManager();
-			int itemId = Integer.parseInt(request.getParameter("item_id"));
-			String newName = request.getParameter("new_name");
-			int newCatId = Integer.parseInt(request.getParameter("new_cat_id"));
 			try{
-				items.editItem(itemId, newName, newCatId);
+				items.addItemType(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"), Integer.parseInt(request.getParameter("cat_id")));
 			} catch (SQLException e){
 				System.out.println(e);
 			}
-		} else if(action.equals("Delete")){
-			ItemTypesManager items = new ItemTypesManager();
-			try{
-				items.deleteItem(Integer.parseInt(request.getParameter("item_id")));
-			} catch (SQLException e){
-				System.out.println(e);
-			}
+		} else {
+			dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
 		}
 		dispatch.forward(request, response);
 	}
