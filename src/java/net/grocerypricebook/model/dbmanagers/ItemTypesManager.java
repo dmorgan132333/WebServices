@@ -154,4 +154,31 @@ public class ItemTypesManager {
 			throw e;	
 		}
 	}
+
+	public ItemType getItemType(int typeId) throws ItemTypeNotFoundException, SQLException{
+		Connection con;
+		Statement stmt;
+		String query;
+		ResultSet rs;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "SELECT id, name, user_id, base_cat_id FROM item_types WHERE id = "+typeId;
+			rs = stmt.executeQuery(query);
+			if(rs.next()){
+				ItemType itemType = new ItemType();
+				itemType.setId(typeId);
+				itemType.setName(rs.getString("name"));
+				itemType.setUserId(rs.getInt("user_id"));
+				itemType.setBaseCategoryId(rs.getInt("base_cat_id"));
+				con.close();
+				return itemType;
+			} else {
+				throw new ItemTypeNotFoundException("Could not find item type with id: " + typeId);
+			}
+		} catch (SQLException e){
+			System.out.println(e);
+			throw e;	
+		}
+	}
 }

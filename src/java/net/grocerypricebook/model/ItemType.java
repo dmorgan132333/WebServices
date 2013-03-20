@@ -14,6 +14,7 @@ public class ItemType {
 	private String name;
 	private int baseCategoryId;
 
+	public ItemType(){}
 
 	public ItemType(int id, int userId, String name, int baseCategoryId){
 		this.id = id;

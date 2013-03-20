@@ -24,6 +24,10 @@
         <servlet-name>EditItemType</servlet-name>
         <servlet-class>net.grocerypricebook.servlet.EditItemType</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditSubtypeDispatcher</servlet-name>
+        <servlet-class>net.grocerypricebook.servlet.subtypes.EditSubtypeDispatcher</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GreetingServlet</servlet-name>
         <url-pattern>/GreetingServlet</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>EditItemType</servlet-name>
         <url-pattern>/EditItemType</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditSubtypeDispatcher</servlet-name>
+        <url-pattern>/EditSubtypeDispatcher</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

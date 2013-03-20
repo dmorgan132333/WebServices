@@ -2,24 +2,26 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.grocerypricebook.servlet;
+package net.grocerypricebook.servlet.subtypes;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import net.grocerypricebook.model.dbmanagers.ItemTypesManager;
+import net.grocerypricebook.model.dbmanagers.ItemSubTypesManager;
 
 /**
  *
  * @author mike
  */
-public class EditItemType extends HttpServlet {
-	private HttpSession HttpSession;
+@WebServlet(name = "RenameSubtype", urlPatterns = {"/RenameSubtype"})
+public class RenameSubtype extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP
@@ -34,30 +36,22 @@ public class EditItemType extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		RequestDispatcher dispatch;
 		HttpSession session = request.getSession(false);
-		ItemTypesManager itemTypeManager = new ItemTypesManager();
-		dispatch = request.getRequestDispatcher("/edititemtypes.jsp");
-		//Get the action value
-		String action = request.getParameter("action");
-		int userId = (Integer)session.getAttribute("userId");
-		int itemId = Integer.parseInt(request.getParameter("item_type_id"));
-		if(action.equals("Submit")){
-			String newName = request.getParameter("new_name");
-			int newBaseCatId = Integer.parseInt(request.getParameter("new_base_cat_id"));
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/edititemsubtypes.jsp");
+		ItemSubTypesManager subtypeManager = new ItemSubTypesManager();
+		int userId = (Integer) session.getAttribute("userId");
+		int subtypeId = Integer.parseInt(request.getParameter("subtype_id"));
+		String newName = request.getParameter("new_name");
+		if(request.getParameter("rename") != null){
 			try{
-				itemTypeManager.editItemType(itemId, userId, newName, newBaseCatId);
+				subtypeManager.renameSubtype(subtypeId, userId, newName);
 			} catch (SQLException e){
 				System.out.println(e);
 			}
-		} else if(action.equals("Delete")){
-			try{
-				itemTypeManager.deleteItemType(itemId, userId);
-			} catch (SQLException e){
-				System.out.println(e);
-			}
+		} else {
+			//Do nothing and forward as normal
 		}
-		dispatch.forward(request, response);
+		dispatcher.forward(request, response);
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
