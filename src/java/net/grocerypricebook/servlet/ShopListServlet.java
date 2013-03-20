@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.grocerypricebook.model.ShopList;
+import net.grocerypricebook.model.dbmanagers.ShoppingListManager;
 
 /**
  *
@@ -38,13 +39,14 @@ public class ShopListServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ShopList shopL = new ShopList();
-         HttpSession session = request.getSession();
+        
+        ShoppingListManager shopL = new ShoppingListManager();
+        HttpSession session = request.getSession();
         int userId = (Integer)session.getAttribute("userId");
         String name = request.getParameter("List Name");
         
         System.out.println("forward to shoplist.jsp");
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/shoplist.jsp");
+        RequestDispatcher dispatcher;
         if(request.getParameter("new_list")!= null){
             System.out.println("creating new list");
             try{
@@ -53,6 +55,8 @@ public class ShopListServlet extends HttpServlet {
             catch(SQLException e){
                 System.out.println(e);
             }
+            dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/shoplist.jsp");
+            dispatcher.forward(request, response);
         }else if(request.getParameter("delete_list")!= null){
             System.out.println("deleting list");
             try{
@@ -61,15 +65,29 @@ public class ShopListServlet extends HttpServlet {
             catch(SQLException e){
                 System.out.println(e);
             }
+            dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/shoplist.jsp");
+            dispatcher.forward(request, response);
+        }else if(request.getParameter("list")!= null){
+            System.out.println("going to list");
+//            try{
+                shopL.getItems(name);
+//            }
+//            catch(SQLException e){
+//                System.out.println(e);
+//            }
+                dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/oneShopList.jsp");
+                dispatcher.forward(request, response);
         }else{
             try{
-               shopL.getList(userId);
+               shopL.getShopList(userId);
             }
             catch(SQLException e){
                 System.out.println(e);
             }
+            dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/shoplist.jsp");
+            dispatcher.forward(request, response);
         }
-        dispatcher.forward(request, response);
+        
         
         
 //        String[] itemsChecked = request.getParameterValues("items");
