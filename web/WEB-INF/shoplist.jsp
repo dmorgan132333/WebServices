@@ -4,12 +4,14 @@
     Author     : Doug
 --%>
 
+<%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
 <%@page import="net.grocerypricebook.model.ShopList"%>
 <%@page import="net.grocerypricebook.model.dbmanagers.ShoppingListManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%ShoppingListManager slm = new ShoppingListManager(); 
     int userId = (Integer)request.getSession().getAttribute("userId");
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -29,6 +31,7 @@
                 </td>
                 <td>
                     <form action="ShopListServlet" method="GET">
+                        <input type="hidden" name="list_name" value="<%= sl.getName()%>" />
                         <input type="submit" name="list" value="list">
                     </form>
                 </td>

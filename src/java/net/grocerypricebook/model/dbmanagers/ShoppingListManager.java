@@ -83,10 +83,54 @@ public class ShoppingListManager {
         }
         return shopList;
     }
-    public ArrayList<ItemList> getItems(String name){
+    public ArrayList<ItemList> getItems()throws SQLException{
         ArrayList<ItemList> itemL = new ArrayList<ItemList>();
+        Connection con;
+        Statement stmt;
+        String query;
+        ResultSet rs;
         
-        itemL.add(new ItemList("monday","milk",3.50));
+        try{
+            con = JDBCUtilities.getConnection();
+            stmt = con.createStatement(); 
+//            query = "INSERT INTO users(login, password) VALUES(\"" + name + "\", \""+password+"\")";
+//            query = "INSERT INTO shopping_lists VALUES(\"" + userID + "\")";
+//            query = "SELECT id,user_id,name FROM item_types WHERE user_Id = \"" +name + "\"";
+            query = "SELECT id,user_id,name FROM item_types";
+            rs = stmt.executeQuery(query);
+            while(rs.next()){
+                itemL.add(new ItemList(rs.getInt("id"),rs.getString("name")));
+            }
+            con.close();
+        } catch (SQLException e){
+            System.out.println(e); 
+            throw e;
+        }
+        return itemL;
+    }
+    public ArrayList<ItemList> getListItems()throws SQLException{
+        ArrayList<ItemList> itemL = new ArrayList<ItemList>();
+        Connection con;
+        Statement stmt;
+        String query;
+        ResultSet rs;
+        
+        try{
+            con = JDBCUtilities.getConnection();
+            stmt = con.createStatement(); 
+//            query = "INSERT INTO users(login, password) VALUES(\"" + name + "\", \""+password+"\")";
+//            query = "INSERT INTO shopping_lists VALUES(\"" + userID + "\")";
+//            query = "SELECT id,user_id,name FROM item_types WHERE user_Id = \"" +name + "\"";
+            query = "SELECT id,user_id,name FROM item_types";
+            rs = stmt.executeQuery(query);
+            while(rs.next()){
+                itemL.add(new ItemList(rs.getInt("id"),rs.getString("name")));
+            }
+            con.close();
+        } catch (SQLException e){
+            System.out.println(e); 
+            throw e;
+        }
         return itemL;
     }
 }

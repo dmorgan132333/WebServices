@@ -45,6 +45,7 @@ public class ShopListServlet extends HttpServlet {
         int userId = (Integer)session.getAttribute("userId");
         String name = request.getParameter("List Name");
         
+        
         System.out.println("forward to shoplist.jsp");
         RequestDispatcher dispatcher;
         if(request.getParameter("new_list")!= null){
@@ -67,16 +68,22 @@ public class ShopListServlet extends HttpServlet {
             }
             dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/shoplist.jsp");
             dispatcher.forward(request, response);
+            
         }else if(request.getParameter("list")!= null){
             System.out.println("going to list");
-//            try{
-                shopL.getItems(name);
-//            }
-//            catch(SQLException e){
-//                System.out.println(e);
-//            }
+            String listName = request.getParameter("list_name");
+            session.setAttribute("listName", listName);
+            try{
+                shopL.getItems();
+                
+            }
+            catch(SQLException e){
+                System.out.println(e);
+            }
+                
                 dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/oneShopList.jsp");
                 dispatcher.forward(request, response);
+                
         }else{
             try{
                shopL.getShopList(userId);

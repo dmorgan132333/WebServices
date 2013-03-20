@@ -12,11 +12,18 @@ public class ItemList {
     private String name;
     private double price;
     private String listName;
-    
+    private int id;
+    public ItemList(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
     public ItemList(String listName,String name, double price){
         this.listName = listName;
         this.name = name;
         this.price = price;
+    }
+    public int getId(){
+        return id;
     }
     public String getName(){
         return name;
