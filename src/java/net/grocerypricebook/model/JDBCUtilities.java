@@ -26,12 +26,8 @@ public class JDBCUtilities {
 	private static int portNumber = 3306;
 	private static BoneCP connectionPool;
 	
-	private static boolean initialized;
-	
 	public static Connection getConnection() throws SQLException {
-		
-		
-		if(!initialized){
+		if(connectionPool == null){
 			try {
 				// load the database driver (make sure this is in your classpath!)
 				Class.forName("com.mysql.jdbc.Driver");
@@ -45,17 +41,15 @@ public class JDBCUtilities {
 			config.setPassword(password);
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
-			config.setPartitionCount(1);
+			config.setPartitionCount(4);
 			config.setIdleConnectionTestPeriodInMinutes(1);
 			config.setConnectionTestStatement("/* ping */ SELECT 1");
 			connectionPool = new BoneCP(config); // setup the connection pool
 			
-			initialized = true;
-			
-			System.out.println("Connected to database");
+			System.out.println("Initialized Pool and returned connection. There are: " + connectionPool.getTotalLeased() + " leased connections.");
 			return connectionPool.getConnection();
 		} else {
-			System.out.println("Connected to database");
+			System.out.println("Returned connection. There are: " + connectionPool.getTotalLeased() + " leased connections.");
 			return connectionPool.getConnection();
 		}
 	}

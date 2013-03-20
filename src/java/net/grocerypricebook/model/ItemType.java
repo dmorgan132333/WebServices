@@ -4,6 +4,10 @@
  */
 package net.grocerypricebook.model;
 
+import java.sql.SQLException;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
+import net.grocerypricebook.model.exceptions.CategoryNotFoundException;
+
 /**
  *
  * @author mike
@@ -13,16 +17,26 @@ public class ItemType {
 	private int userId;
 	private String name;
 	private int baseCategoryId;
+	private Category baseCategory;
 
 	public ItemType(){}
 
-	public ItemType(int id, int userId, String name, int baseCategoryId){
+	public ItemType(int id, int userId, String name, int baseCategoryId) throws SQLException, CategoryNotFoundException{
 		this.id = id;
 		this.userId = userId;
 		this.name = name;
 		this.baseCategoryId = baseCategoryId;
+		CategoriesManager catMan = new CategoriesManager();
+		baseCategory = catMan.getCategory(baseCategoryId);
 	}
 
+	public Category getBaseCategory(){
+		return baseCategory;
+	}
+
+	public void setBaseCategory(Category cat){
+		this.baseCategory = cat;
+	}
 	/**
 	 * @return the id
 	 */

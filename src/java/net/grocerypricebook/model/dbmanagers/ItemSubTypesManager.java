@@ -169,4 +169,30 @@ public class ItemSubTypesManager {
 		}
 
 	}
+
+	public ItemSubType getSubType(int subtypeId) throws ItemTypeNotFoundException, SQLException{
+		Connection con;
+		Statement stmt;
+		String query;
+		ResultSet rs;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "SELECT item_type_id,name,user_id FROM item_subtypes WHERE id = "+subtypeId;
+			rs = stmt.executeQuery(query);
+			if(rs.next()){
+				int parentId = rs.getInt("item_type_id");
+				String name = rs.getString("name");
+				int userId = rs.getInt("user_id");	
+				ItemSubType subtype = new ItemSubType(subtypeId, parentId, userId, name);
+				con.close();
+				return subtype;
+			} else {
+				throw new ItemTypeNotFoundException("Could not find item subtype with id: " + subtypeId);
+			}
+		} catch (SQLException e){
+			System.out.println(e);
+			throw e;
+		}
+	}
 }
