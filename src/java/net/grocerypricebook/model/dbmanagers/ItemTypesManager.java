@@ -44,14 +44,19 @@ public class ItemTypesManager {
 	public void addItemType(String name, int userId, int categoryId) throws SQLException{
 		Connection con;
 		Statement stmt;
-		String query;
+		String query, query2;
 		ResultSet rs;
 		ArrayList<ArrayList<String>> outterList = new ArrayList();
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			query = "INSERT INTO item_types(name, user_id, base_cat_id) VALUES(\"" + name + "\", "+ userId + ", " + categoryId + ")";
-			stmt.executeUpdate(query);
+			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			rs = stmt.getGeneratedKeys();
+			rs.next();
+			int generatedId = rs.getInt(1);
+			query2 = "INSERT INTO items(item_type_id, user_id) VALUES("+generatedId+", "+userId+")";
+			stmt.executeUpdate(query2);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);
@@ -62,12 +67,14 @@ public class ItemTypesManager {
 	public void deleteItemType(int itemId, int userId) throws SQLException{
 		Connection con;
 		Statement stmt;
-		String query;
+		String query, query2;
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			query = "DELETE FROM item_types WHERE id = " + itemId + " AND user_id = " + userId;
+			query2 = "DELETE FROM items WHERE item_type_id = " + itemId + " AND user_id = " + userId;
 			stmt.executeUpdate(query);
+			stmt.executeUpdate(query2);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);

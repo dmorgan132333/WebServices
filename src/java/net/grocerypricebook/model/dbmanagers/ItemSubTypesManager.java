@@ -48,15 +48,28 @@ public class ItemSubTypesManager {
 		}
 	}
 
+	/**
+	 * Create new entry in the item_subtypes table and items table
+	 * @param parentTypeId
+	 * @param userId
+	 * @param name
+	 * @throws SQLException 
+	 */
 	public void addSubtype(int parentTypeId, int userId, String name) throws SQLException{
 		Connection con;
 		Statement stmt;
-		String query;
+		String query, query2;
+		ResultSet rs;
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			query = "INSERT INTO item_subtypes(item_type_id, user_id, name) VALUES("+parentTypeId+", "+userId+", \""+name+"\")";
-			stmt.executeUpdate(query);
+			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			rs = stmt.getGeneratedKeys();
+			rs.next();
+			int generatedId = rs.getInt(1);
+			query2 = "INSERT INTO items(item_type_id, item_subtype_id, user_id) VALUES("+parentTypeId+","+generatedId+","+userId+")";
+			stmt.executeUpdate(query2);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);
@@ -64,15 +77,23 @@ public class ItemSubTypesManager {
 		}
 	}
 
+	/**
+	 * Delete entry from item_subtypes table and items table.
+	 * @param subtypeId
+	 * @param userId
+	 * @throws SQLException 
+	 */
 	public void deleteSubtype(int subtypeId, int userId) throws SQLException{
 		Connection con;
 		Statement stmt;
-		String query;
+		String query, query2;
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "DELETE FROM item_subtypes WHERE (id = "+subtypeId+" AND user_id = "+userId+")";
+			query = "DELETE from items WHERE (item_subtype_id = "+subtypeId+" AND user_id="+userId+")";
 			stmt.executeUpdate(query);
+			query2 = "DELETE FROM item_subtypes WHERE (id = "+subtypeId+" AND user_id = "+userId+")";
+			stmt.executeUpdate(query2);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);
