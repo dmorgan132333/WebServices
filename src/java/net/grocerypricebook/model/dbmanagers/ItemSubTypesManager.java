@@ -55,11 +55,12 @@ public class ItemSubTypesManager {
 	 * @param name
 	 * @throws SQLException 
 	 */
-	public void addSubtype(int parentTypeId, int userId, String name) throws SQLException{
+	public void addSubtype(int parentTypeId, int userId, String name) throws SQLException, ItemTypeNotFoundException{
 		Connection con;
 		Statement stmt;
-		String query, query2;
+		String query;
 		ResultSet rs;
+		ItemManager itemManager = new ItemManager();
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
@@ -68,8 +69,7 @@ public class ItemSubTypesManager {
 			rs = stmt.getGeneratedKeys();
 			rs.next();
 			int generatedId = rs.getInt(1);
-			query2 = "INSERT INTO items(item_type_id, item_subtype_id, user_id) VALUES("+parentTypeId+","+generatedId+","+userId+")";
-			stmt.executeUpdate(query2);
+			itemManager.addItem(userId, parentTypeId, generatedId, null);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);
@@ -78,11 +78,7 @@ public class ItemSubTypesManager {
 	}
 
 	/**
-	 * Delete entry from item_subtypes table and items table.
-	 * @param subtypeId
-	 * @param userId
-	 * @throws SQLException 
-	 */
+	 * OLD
 	public void deleteSubtype(int subtypeId, int userId) throws SQLException{
 		Connection con;
 		Statement stmt;
@@ -100,6 +96,39 @@ public class ItemSubTypesManager {
 			throw e;
 		}
 
+	}
+	* /
+
+	/**
+	 * CAUTION: If you delete an admin item_type_subtype, it will also delete all
+	 * items based on that item subtype for ALL USERS without them knowing.
+	 * This seems catastrophic, perhaps there is a better way to handle it...
+	 * @param itemTypeId
+	 * @param userId
+	 * @throws SQLException 
+	 */
+	public void deleteSubtype(int subtypeId, int userId) throws SQLException{
+		Connection con;
+		Statement stmt;
+		String query;
+		ResultSet rs;
+		ItemManager itemManager = new ItemManager();
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "SELECT id FROM items WHERE item_subtype_id = "+subtypeId+" AND user_id ="+userId;
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				itemManager.deleteItem(rs.getInt("id"), userId);	
+			}
+			query = "DELETE FROM item_subtypes WHERE id = " + subtypeId + " AND user_id = " + userId;
+			stmt.executeUpdate(query);
+
+			con.close();
+		} catch (SQLException e){
+			System.out.println(e);
+			throw e;	
+		}
 	}
 
 	public String getSubtypeName(int subtypeId) throws ItemTypeNotFoundException, SQLException{

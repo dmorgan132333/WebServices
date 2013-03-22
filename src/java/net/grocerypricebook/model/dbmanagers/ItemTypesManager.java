@@ -41,11 +41,20 @@ public class ItemTypesManager {
 		}
 	}
 
-	public void addItemType(String name, int userId, int categoryId) throws SQLException{
+	/**
+	 * Creates the item_type and also adds the basic item to items.
+	 * @param name
+	 * @param userId
+	 * @param categoryId
+	 * @throws SQLException
+	 * @throws ItemTypeNotFoundException 
+	 */
+	public void addItemType(String name, int userId, int categoryId) throws SQLException, ItemTypeNotFoundException{
 		Connection con;
 		Statement stmt;
 		String query, query2;
 		ResultSet rs;
+		ItemManager itemManager = new ItemManager();
 		ArrayList<ArrayList<String>> outterList = new ArrayList();
 		try{
 			con = JDBCUtilities.getConnection();
@@ -55,8 +64,7 @@ public class ItemTypesManager {
 			rs = stmt.getGeneratedKeys();
 			rs.next();
 			int generatedId = rs.getInt(1);
-			query2 = "INSERT INTO items(item_type_id, user_id) VALUES("+generatedId+", "+userId+")";
-			stmt.executeUpdate(query2);
+			itemManager.addItem(userId, generatedId, 0, null);
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);
@@ -64,17 +72,32 @@ public class ItemTypesManager {
 		}
 	}
 
-	public void deleteItemType(int itemId, int userId) throws SQLException{
+	/**
+	 * CAUTION: If you delete an admin item_type, it will also delete all
+	 * items based on that item type for ALL USERS without them knowing.
+	 * This seems catastrophic, perhaps there is a better way to handle it...
+	 * @param itemTypeId
+	 * @param userId
+	 * @throws SQLException 
+	 */
+	public void deleteItemType(int itemTypeId, int userId) throws SQLException{
 		Connection con;
 		Statement stmt;
-		String query, query2;
+		String query;
+		ResultSet rs;
+		ItemManager itemManager = new ItemManager();
 		try{
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "DELETE FROM item_types WHERE id = " + itemId + " AND user_id = " + userId;
-			query2 = "DELETE FROM items WHERE item_type_id = " + itemId + " AND user_id = " + userId;
+			query = "SELECT id FROM items WHERE item_type_id = "+itemTypeId+" AND user_id ="+userId;
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				itemManager.deleteItem(rs.getInt("id"), userId);	
+			}
+
+			query = "DELETE FROM item_types WHERE id = " + itemTypeId + " AND user_id = " + userId;
 			stmt.executeUpdate(query);
-			stmt.executeUpdate(query2);
+
 			con.close();
 		} catch (SQLException e){
 			System.out.println(e);

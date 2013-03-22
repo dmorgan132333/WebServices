@@ -9,7 +9,7 @@
         <h1>Welcome</h1>  
 
         Enter price information</br></br>
-        View and edit items.</br>
+        <a href="edititems.jsp">View and edit items.</a></br>
         <a href="edititemtypes.jsp">View and edit item types and subtypes.</a></br>
         <a href="editcategories.jsp">View and edit item categories.</a></br></br>
         
