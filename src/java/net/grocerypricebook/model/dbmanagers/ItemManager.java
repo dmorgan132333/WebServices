@@ -83,7 +83,7 @@ public class ItemManager {
 			
 			ArrayList<Integer> categories = getItemCategories(itemId);
 			for(Integer catId: categories){
-				Category cat = categoryManager .getCategory(catId);
+				Category cat = categoryManager.getCategory(catId);
 				item.addOtherCategory(cat);
 			}
 			
@@ -149,13 +149,13 @@ public class ItemManager {
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
 			//items table query
-
+			
 			Integer subtypeId;
 			if(itemSubtypeId == 0)
 				subtypeId = null;
 			else
 				subtypeId = itemSubtypeId;
-
+			
 			query = "INSERT INTO items(item_type_id, item_subtype_id, user_id) VALUES("+itemTypeId+", "+subtypeId+", "+userId+")";
 			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			rs = stmt.getGeneratedKeys();
@@ -217,26 +217,29 @@ public class ItemManager {
 	 * @param userId
 	 * @param categoryId
 	 * @return
-	 *
-	 * public ArrayList<Item> getItemsInCategory(int userId, int categoryId){
-	 * Connection con;
-	 * Statement stmt;
-	 * String query;
-	 * ResultSet rs;
-	 * try{
-	 * con = JDBCUtilities.getConnection();
-	 * stmt = con.createStatement();
-	 * query = "SELECT category_id FROM item_categories WHERE item_id ="+itemId;
-	 * rs = stmt.executeQuery(query);
-	 * ArrayList<Item> items = new ArrayList<Item>();
-	 * while(rs.next()){
-	 * items.add()
-	 * }
-	 * con.close();
-	 * return categories;
-	 * } catch (SQLException e){
-	 * System.out.println(e);
-	 * throw e;
-	 * }
-	 * } */
+	 */
+	public ArrayList<Item> getItemsInCategory(int userId, int categoryId) throws SQLException, ItemTypeNotFoundException, CategoryNotFoundException{
+		Connection con;
+		Statement stmt;
+		String query;
+		ResultSet rs;
+		try{
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "SELECT item_id FROM item_categories "+
+				"INNER JOIN items ON (items.user_id = "+userId+" OR items.user_id = 1) "+ 
+				"AND item_categories.category_id = "+categoryId+" "+
+				"AND items.id = item_categories.item_id";
+			rs = stmt.executeQuery(query);
+			ArrayList<Item> items = new ArrayList<Item>();
+			while(rs.next()){
+				items.add(getItem(rs.getInt("item_id")));
+			}
+			con.close();
+			return items;
+		} catch (SQLException e){
+			System.out.println(e);
+			throw e;
+		}
+	}
 }
