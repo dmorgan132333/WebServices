@@ -90,4 +90,25 @@ public class GroceryStoreManager {
         
         return gsl;
     }
+    public void editGroceryStore(int store_id, int user_id, String name,String state,String city,String address,String zip)throws SQLException{
+        int zipp = Integer.parseInt(zip);
+		Connection con;
+		Statement stmt;
+		String query;
+//                editGroceryStore(Integer.parseInt(id),userId);
+		try{
+                    con = JDBCUtilities.getConnection();
+                    stmt = con.createStatement();
+                    query = "DELETE FROM grocery_stores WHERE id= \"" + store_id + "\" AND user_id = \"" +user_id +"\"";
+                    stmt.executeUpdate(query);
+                   
+			con = JDBCUtilities.getConnection();
+			stmt = con.createStatement();
+			query = "INSERT INTO grocery_stores(name,address,state,city,zip,user_id) VALUES(\"" + name + "\", \"" + address + "\",\"" + state + "\",\"" + city + "\",\"" + zipp + "\",\"" + user_id + "\")";
+			stmt.executeUpdate(query);
+			con.close();
+		} catch (SQLException e){
+			System.out.println(e);
+		}	
+    }
 }

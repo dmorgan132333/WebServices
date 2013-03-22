@@ -187,8 +187,6 @@ public class CategoriesManager {
 			System.out.println(e);
 		} 
 	}
-
-
 	public void editCategory(int id, String newName){
 		Connection con;
 		Statement stmt;

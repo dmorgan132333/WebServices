@@ -21,6 +21,52 @@
         <h2><a href="welcome.jsp">Home</a></h2> 
         
         <form action="GroceryStoreServlet" method="GET">
+            <%--
+
+            <%if(session.getAttribute("edit")!= null){
+               
+               System.out.println(session.getAttribute("edit")!= null);
+            %>
+            <table>
+                <tr>
+                    <td>
+                        Store Name      <input type="text" name="store_name" value="<%=session.getAttribute("store_name")%>"size="20">
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td>
+                        Store Address   <input type="text" name="address" value="<%=session.getAttribute("state")%>" size="20">
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td>
+                        Store State     <input type="text" name="state" value="<%=session.getAttribute("city")%>" size="20">
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td>
+                       Store City       <input type="text" name="city" value="<%=session.getAttribute("address")%>" size="20">
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td>
+                        Store Zip       <input type="text" name="zip" value="<%=session.getAttribute("zip")%>" size="20">
+                    </td>
+                </tr>
+               
+                <tr align="center">
+                    <td>
+                        <input type="submit" name="new_store" value="New Store">
+                    </td>
+                </tr>   
+            </table>
+            <%}else{%>
+            --%>
+            
             <table>
                 <tr>
                     <td>
@@ -51,12 +97,15 @@
                         Store Zip       <input type="text" name="zip" size="20">
                     </td>
                 </tr>
+               
                 <tr align="center">
                     <td>
                         <input type="submit" name="new_store" value="New Store">
                     </td>
                 </tr>   
             </table>
+           <%-- <%}%>
+           --%>
             <table>
                 <tr colspan="2">
                     <td colspan="2">
@@ -103,6 +152,17 @@
                 <td width="100">
                     <%=gs.getUserID()%>
                 </td>
+                <%--<td>
+                    <%
+                        String id = Integer.toString(gs.getStoreID());
+                    %>
+                    <form action="GroceryStoreServlet" method="GET">
+                        <input type="hidden" name="store_id" value="<%=id%>">
+                        <input type="submit"  name="edit" value="Edit Store">
+                    </form>
+                        
+                </td>--%>
+                
             </tr>
         </table>
         
