@@ -88,7 +88,12 @@ public class Item {
 	}
 
 	public void addOtherCategory(Category other){
-		otherCategories.add(other);
+		if(otherCategories != null){
+			otherCategories.add(other);
+		} else {
+			otherCategories = new ArrayList<Category>();
+			otherCategories.add(other);
+		}
 	}
 
 	public ArrayList<Category> getAllCategories(){
