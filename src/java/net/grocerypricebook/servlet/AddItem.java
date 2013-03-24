@@ -43,6 +43,7 @@ public class AddItem extends HttpServlet {
 	 * @throws ServletException if a servlet-specific error occurs
 	 * @throws IOException if an I/O error occurs
 	 * TODO: check for valid parameters and handle error if not valid.
+	 * TODO: create some kinda WIZARD so that when selecting a parent type, categories are handled correctly
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
