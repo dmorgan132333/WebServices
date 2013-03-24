@@ -231,16 +231,50 @@ public class CategoriesManager {
 	
 	/**
 	 * Given a list of categories IDs, return the corresponding category_combo_id
-	 * or create a new one and return its ID.
+	 * or 0 if the combination does not exist.
 	 * @param categories List of Integers representing category IDs
-	 * @return
+	 * @return int which is the category_combos.id unique to the provided combination of categories or 0 if that combination was not found.
 	 */
 	public int getCategoryComboId(ArrayList<Integer> categories) throws SQLException{
 		Connection con = JDBCUtilities.getConnection();
 		Statement stmt = con.createStatement();
-		String query = "SELECT combo_id FROM category_combo_entries";
-		ResultSet rs;
-		
+		String query = "SELECT DISTINCT c.id " +
+			       "FROM category_combos c " +
+			       "INNER JOIN (";
+		for(int i = 0; i < categories.size(); i++){
+			if(i == 0)
+			       query += String.format("category_combo_entries e%d", i+1);
+		        else
+			       query += String.format(", category_combo_entries e%d", i+1);
+		}
+
+		query += ") ON ";
+
+		for(int i = 0; i < categories.size(); i++){
+			if(i == 0)
+			       query += String.format("c.id = e%d.combo_id", i+1);
+		        else
+			       query += String.format(" AND c.id = e%d.combo_id", i+1);
+		}
+
+		query += " WHERE c.num_categories = " + categories.size();
+
+		for(int i = 0; i < categories.size(); i++){
+			       query += String.format(" AND e%d.category_id = %d", i+1, categories.get(i));
+		}
+
+		System.out.println("getCategoryComboId( QUERY: " + query);
+
+		ResultSet rs = stmt.executeQuery(query);
+
+		if(rs.next()){
+			int result = rs.getInt(1);
+			con.close();
+			return result;
+		} else {
+			con.close();
+			return 0;
+		}
 	}
 	
 	/**
@@ -268,16 +302,17 @@ public class CategoriesManager {
 				query += String.format(", (%d,%d)", combo_id, categoryIds.get(i));
 			}
 		}
-		System.out.println("QUERY: " + query);
+		System.out.println("addCategoryCombo(...) QUERY: " + query);
 		stmt.executeUpdate(query);
 		con.close();
 		return combo_id;
 	}
 
+	/*
 	public ArrayList<Item> getItemsInCategory(int categoryId){
 		Connection con = JDBCUtilities.getConnection();
 		Statement stmt = con.createStatement();
 		String query = "SELECT  "
-	}
+	}*/
 
 }

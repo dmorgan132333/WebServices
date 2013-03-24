@@ -15,6 +15,7 @@
 	CategoriesManager catMan = new CategoriesManager();
 	ItemManager itemManager = new ItemManager();
 	int userId = (Integer) session.getAttribute("userId");
+	ArrayList<Item> items = itemManager.getAllItems(userId);
 %>
 <html>
 	<head>
@@ -36,8 +37,9 @@
 	<body>
 		<h1>Edit Items</h1>
 		<h2><a href="welcome.jsp">Home</a></h2>
-		<table class="center">
-		</table>
+		<% for(Item i: items) { %>
+			<%= i.getName() %><br/>
+		<% } %>
 		<a href="additem.jsp">Add Item</a>
 	</body>
 </html>

@@ -67,14 +67,32 @@ public class ItemManager {
 			item.setParentId(rs.getInt("parent_id"));
 			item.setCategoryComboId(rs.getInt("category_combo_id"));
 			item.setUserId(rs.getInt("user_id"));
+			con.close();
 			return item;
 		} else {
+			con.close();
 			throw new ItemNotFoundException("Item with id: " + itemId + " was not found in the database.");
 		}
 	}
 	
 	public void addItem(int userId, int parentId, String name, ArrayList<Integer> additionalCategories) throws SQLException, ItemNotFoundException{
-
+		CategoriesManager catMan = new CategoriesManager();
+		Connection con = JDBCUtilities.getConnection();
+		Statement stmt = con.createStatement();
+		int catComboId = catMan.getCategoryComboId(additionalCategories);
+		if(catComboId == 0){
+			catComboId = catMan.addCategoryCombo(additionalCategories);
+		}
+		String query;
+		if(parentId == 0){
+			query = "INSERT INTO items(name, category_combo_id, user_id) VALUES(\"%s\", %d, %d)";
+			query = String.format(query, name, catComboId, userId);
+		} else {
+			query = "INSERT INTO items(name, parent_id, category_combo_id, user_id) VALUES(\"%s\", %d, %d, %d)";
+			query = String.format(query, name, parentId, catComboId, userId);
+		}
+		stmt.executeUpdate(query);
+		con.close();
 	}
 	
 	/**
