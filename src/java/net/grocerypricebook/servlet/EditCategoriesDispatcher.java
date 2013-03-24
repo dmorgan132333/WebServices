@@ -5,6 +5,7 @@
 package net.grocerypricebook.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,7 @@ import net.grocerypricebook.model.dbmanagers.CategoriesManager;
  * @author mike
  */
 public class EditCategoriesDispatcher extends HttpServlet {
-
+	
 	/**
 	 * Processes requests for both HTTP
 	 * <code>GET</code> and
@@ -42,21 +43,31 @@ public class EditCategoriesDispatcher extends HttpServlet {
 			dispatch = request.getRequestDispatcher("/WEB-INF/deletecat.jsp");
 		}
 		else if (request.getParameter("add_basic") != null){
-			dispatch = request.getRequestDispatcher("/editcategories.jsp");
-			CategoriesManager manager = new CategoriesManager();
-			manager.addBasicCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
-		} 
+			try{
+				dispatch = request.getRequestDispatcher("/editcategories.jsp");
+				CategoriesManager manager = new CategoriesManager();
+				manager.addBasicCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
+			} catch (SQLException e){
+				System.out.println(e);
+				dispatch = request.getRequestDispatcher("/editcategories.jsp");
+			}
+		}
 		else if (request.getParameter("add_other") != null){
-			dispatch = request.getRequestDispatcher("/editcategories.jsp");
-			CategoriesManager manager = new CategoriesManager();
-			manager.addOtherCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
-		} 
+			try{
+				dispatch = request.getRequestDispatcher("/editcategories.jsp");
+				CategoriesManager manager = new CategoriesManager();
+				manager.addOtherCategory(request.getParameter("addNewName"), (Integer)session.getAttribute("userId"));
+			} catch (SQLException e){
+				System.out.println(e);
+				dispatch = request.getRequestDispatcher("/editcategories.jsp");
+			}
+		}
 		else {
 			dispatch = request.getRequestDispatcher("/editcategories.jsp");
 		}
 		dispatch.forward(request, response);
 	}
-
+	
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 	/**
 	 * Handles the HTTP
@@ -72,7 +83,7 @@ public class EditCategoriesDispatcher extends HttpServlet {
 		throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP
 	 * <code>POST</code> method.
@@ -87,7 +98,7 @@ public class EditCategoriesDispatcher extends HttpServlet {
 		throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

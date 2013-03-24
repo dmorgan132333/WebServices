@@ -1,23 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package net.grocerypricebook.model;
 
 import java.util.ArrayList;
 
 /**
- *
+ * Represents an entry in the items table.
  * @author mike
  */
 public class Item {
 	private int id;
 	private int userId;
-	private ItemType type;
-	private ItemSubType subtype;
-	private ArrayList<Category> otherCategories;
-
-	public Item() {}
+	private int parentId;
+	private String name;
+	private int categoryComboId;
+	private ArrayList<Integer> categories;
 
 	/**
 	 * @return the id
@@ -48,85 +43,59 @@ public class Item {
 	}
 
 	/**
-	 * @return the typeId
+	 * @return the parentId
 	 */
-	public int getTypeId() {
-		return type.getId();
+	public int getParentId() {
+		return parentId;
 	}
 
 	/**
-	 * @return the subtypeId
+	 * @param parentId the parentId to set
 	 */
-	public int getSubtypeId() {
-		return subtype.getId();
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 
 	/**
-	 * @return the name of the Item, a combination of the type name and subtype name or just type name if there is no subtype
+	 * @return the name
 	 */
 	public String getName() {
-		if(subtype != null){
-			return subtype.getName() + " " + type.getName();
-		} else {
-			return type.getName();
-		}
-	}
-
-
-	/**
-	 * @return the baseCategory
-	 */
-	public Category getBaseCategory() {
-		return type.getBaseCategory();
+		return name;
 	}
 
 	/**
-	 * @return the otherCategories
+	 * @param name the name to set
 	 */
-	public ArrayList<Category> getOtherCategories() {
-		return otherCategories;
-	}
-
-	public void addOtherCategory(Category other){
-		if(otherCategories != null){
-			otherCategories.add(other);
-		} else {
-			otherCategories = new ArrayList<Category>();
-			otherCategories.add(other);
-		}
-	}
-
-	public ArrayList<Category> getAllCategories(){
-		ArrayList<Category> all = (ArrayList<Category>) otherCategories.clone();
-		all.add(type.getBaseCategory());
-		return all;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * @return the type
+	 * @return the categories
 	 */
-	public ItemType getType() {
-		return type;
+	public ArrayList<Integer> getCategories() {
+		return categories;
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param categories the categories to set
 	 */
-	public void setType(ItemType type) {
-		this.type = type;
+	public void setCategories(ArrayList<Integer> categories) {
+		this.categories = categories;
 	}
 
 	/**
-	 * @return the subtype
+	 * @return the category_combo_id
 	 */
-	public ItemSubType getSubtype() {
-		return subtype;
+	public int getCategoryComboCd() {
+		return categoryComboId;
 	}
 
 	/**
-	 * @param subtype the subtype to set
+	 * @param category_combo_id the category_combo_id to set
 	 */
-	public void setSubtype(ItemSubType subtype) {
-		this.subtype = subtype;
+	public void setCategoryComboId(int categoryComboId) {
+		this.categoryComboId = categoryComboId;
 	}
+
 }
