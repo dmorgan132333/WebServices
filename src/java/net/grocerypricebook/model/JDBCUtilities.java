@@ -17,12 +17,12 @@ import java.util.Properties;
 public class JDBCUtilities {
 	public static String dbms = "mysql";
 	public static String jarFile;
-	public static String dbName = "webserviceshw4";
-	public static String userName = "webserviceshw4";
+	public static String dbName = "webserviceshw42";
+	public static String userName = "webserviceshw42";
 	public static String password = "Oswego!1";
 	public static String urlString;
 	
-	private static String serverName = "webserviceshw4.db.10690692.hostedresource.com";
+	private static String serverName = "webserviceshw42.db.10690692.hostedresource.com";
 	private static int portNumber = 3306;
 	private static BoneCP connectionPool;
 	
@@ -42,7 +42,7 @@ public class JDBCUtilities {
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
 			config.setPartitionCount(4);
-			config.setIdleConnectionTestPeriodInMinutes(1);
+			config.setIdleConnectionTestPeriodInSeconds(15);
 			config.setConnectionTestStatement("/* ping */ SELECT 1");
 			connectionPool = new BoneCP(config); // setup the connection pool
 			

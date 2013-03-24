@@ -4,7 +4,6 @@
  */
 package net.grocerypricebook.servlet;
 
-import net.grocerypricebook.model.UsersOld;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -26,7 +25,6 @@ import net.grocerypricebook.model.dbmanagers.ShoppingListManager;
  */
 //@WebServlet(name = "ShopListServlet", urlPatterns = {"/ShopListServlet"})
 public class ShopListServlet extends HttpServlet {
-    UsersOld user = new UsersOld();
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and

@@ -4,7 +4,6 @@
     Author     : Doug
 --%>
 
-<%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
 <%@page import="net.grocerypricebook.model.ShopList"%>
 <%@page import="net.grocerypricebook.model.dbmanagers.ShoppingListManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

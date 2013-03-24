@@ -4,16 +4,13 @@
     Author     : dmoney1323
 --%>
 
-<%@page import="net.grocerypricebook.model.dbmanagers.ItemTypesManager"%>
 <%@page import="net.grocerypricebook.model.ItemList"%>
 <%@page import="net.grocerypricebook.model.dbmanagers.ShoppingListManager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%ShoppingListManager slm = new ShoppingListManager(); 
     int userId = (Integer)request.getSession().getAttribute("userId");
 %>
-<%ItemTypesManager itm = new ItemTypesManager();
-  
-%>
+
 <%String listname = (String)session.getAttribute("listName");%>
 <!DOCTYPE html>
 <html>

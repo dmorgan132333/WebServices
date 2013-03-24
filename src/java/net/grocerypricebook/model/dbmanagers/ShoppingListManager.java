@@ -96,7 +96,7 @@ public class ShoppingListManager {
 //            query = "INSERT INTO users(login, password) VALUES(\"" + name + "\", \""+password+"\")";
 //            query = "INSERT INTO shopping_lists VALUES(\"" + userID + "\")";
 //            query = "SELECT id,user_id,name FROM item_types WHERE user_Id = \"" +name + "\"";
-            query = "SELECT id,user_id,name FROM item_types";
+            query = "SELECT id,user_id,name FROM items";
             rs = stmt.executeQuery(query);
             while(rs.next()){
                 itemL.add(new ItemList(rs.getInt("id"),rs.getString("name")));
