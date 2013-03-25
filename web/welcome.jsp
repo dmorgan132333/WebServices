@@ -7,6 +7,7 @@
     </head>
     <body>
         <h1>Welcome</h1>  
+        <a href="index.jsp">Log Out</a><br><br>
         
         <a href="enterprice.jsp">Enter price information</a><br>
 	<a href="viewprices.jsp">View prices</a><br><br>

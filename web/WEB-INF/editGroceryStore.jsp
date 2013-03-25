@@ -23,13 +23,12 @@
                 </tr>
                 <tr>
                     <td>
-                        Store Address   <input type="text" name="address" value="<%=session.getAttribute("state")%>" size="20">
+                        Store State     <input type="text" name="state" value="<%=session.getAttribute("city")%>" size="20">
                     </td>
-                  
                 </tr>
                 <tr>
                     <td>
-                        Store State     <input type="text" name="state" value="<%=session.getAttribute("city")%>" size="20">
+                        Store Address   <input type="text" name="address" value="<%=session.getAttribute("state")%>" size="20">
                     </td>
                 </tr>
                 <tr>

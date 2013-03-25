@@ -102,7 +102,7 @@ public class GroceryStoreManager {
             
             rs = stmt.executeQuery(query);
             while(rs.next()){
-                gsl.add(new GroceryStore(rs.getInt("id"),rs.getString("name"),rs.getString("address"),rs.getString("state"),rs.getString("city"),rs.getInt("zip"),rs.getInt("user_id")));
+                gsl.add(new GroceryStore(rs.getInt("id"),rs.getString("name"),rs.getString("state"),rs.getString("city"),rs.getString("address"),rs.getInt("zip"),rs.getInt("user_id")));
                 
             }
             con.close();

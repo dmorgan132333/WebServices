@@ -24,8 +24,17 @@ public class LoginServlet extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             UsersManager users = new UsersManager();
+            
             RequestDispatcher dispatch;
             HttpSession session = request.getSession();
+            if(request.getParameter("sign_up")!=null){
+                System.out.println("sign_up");
+                try{
+                    users.addUser(username, password);
+                }catch(SQLException e){
+                    System.out.println(e);
+                }    
+            }
             try{
                 if(users.passwordMatch(username, password)){
                     int userId = users.getUserId(username);
