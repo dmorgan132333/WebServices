@@ -126,10 +126,10 @@ public class Item {
 		}
 
 		if(parent == null){
-			return name + ": " + catString;
+			return catString + ": " + name;
 		}
 		else{
-			return parent.getName() + ", " + name + ": " + catString;
+			return catString + ": " + parent.getName() + ", " + name;
 		}
 	}
 
