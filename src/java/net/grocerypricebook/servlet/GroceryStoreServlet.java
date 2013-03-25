@@ -51,87 +51,87 @@ public class GroceryStoreServlet extends HttpServlet {
                 String address = "";
                 String zip  =  "";
                 String city =  "";
-//                System.out.println("else statment");
+                
                 if(request.getParameter("store_name")!="" && request.getParameter("state")!= "" && request.getParameter("city")!=""
                         && request.getParameter("address")!="" && request.getParameter("zip")!="" ){
                     name = request.getParameter("store_name");
                
-                
                     state= request.getParameter("state");
                 
-                
                     city = request.getParameter("city");
-              
-               
+                    
                     address = request.getParameter("address");
-                
-               
+                    
                     zip = request.getParameter("zip");
+                    
                     session.setAttribute("empty_field", "");
-                     gsm.addNewGroceryStore(userId,name,state,city,address,zip);
-                dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
-                dispatcher.forward(request, response);
+                    
+                    gsm.addNewGroceryStore(userId,name,state,city,address,zip);
+                    
+                    dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
+                    dispatcher.forward(request, response);
                 }else{
-                    System.out.println("else statment");
-                    session.setAttribute("empty_field", "One or more Fields are empty!");
+                    request.setAttribute("empty_field", new Boolean(true));
                     dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
                     dispatcher.forward(request, response);
                 }
-//                int userID, String name,String state,String city,String address,int zip
-               
             }
             catch(SQLException e){
                 System.out.println(e);
             }
-           
         }else if(request.getParameter("delete_store") != null){
              String id = "";
-             session.setAttribute("empty_field", "");
+             System.out.println("deleteing store " + id +" " + userId);
+             
             if(request.getParameter("store_id")!=""){
                id = request.getParameter("store_id");
-            
-                System.out.println("deleteing store " + id +" " + userId);
-            try{
-                gsm.deleteGroceryStore(Integer.parseInt(id),userId);
-            }catch(SQLException e){
-                System.out.println(e);
-            }
-                dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
+                    System.out.println("deleteing store " + id +" " + userId);
+                try{
+                    gsm.deleteGroceryStore(Integer.parseInt(id),userId);
+                }catch(SQLException e){
+                    System.out.println(e);
+                }
+                    dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
 
-               dispatcher.forward(request, response);
+                   dispatcher.forward(request, response);
             }else{
+                request.setAttribute("empty_field", new Boolean(true));
+
                 dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
 
                dispatcher.forward(request, response);
             }
            
         }else if(request.getParameter("edit")!= null){
+            //sends you to store editor
+             String usercheck = request.getParameter("user_id");
+             if(userId == Integer.parseInt(usercheck)){
+                 
+                String name = request.getParameter("store_name");
+                session.setAttribute("store_name", name);
+
+                String state = request.getParameter("state");
+                session.setAttribute("state", state);
+
+                String city = request.getParameter("city");
+                session.setAttribute("city", city);
+
+                String address = request.getParameter("address");
+                session.setAttribute("address", address);
+
+                String zip = request.getParameter("zip");
+                session.setAttribute("zip", zip);
+
+                String edit = request.getParameter("edit");
+                session.setAttribute("edit",edit);
+
+                String id = request.getParameter("store_id");
+                session.setAttribute("store_id",id);
+                int idd = Integer.parseInt(id);
+                System.out.println("editing store ");
             
-            String name = request.getParameter("store_name");
-            session.setAttribute("store_name", name);
-            
-            String state = request.getParameter("state");
-            session.setAttribute("state", state);
-            
-            String city = request.getParameter("city");
-            session.setAttribute("city", city);
-            
-            String address = request.getParameter("address");
-            session.setAttribute("address", address);
-            
-            String zip = request.getParameter("zip");
-            session.setAttribute("zip", zip);
-                
-            String edit = request.getParameter("edit");
-            session.setAttribute("edit",edit);
-             
-            String id = request.getParameter("store_id");
-            
-            
-            int idd = Integer.parseInt(id);
-            System.out.println("editing store ");
-            
-             System.out.println(name + ""+ state + ""+ city+ ""+address+ ""+zip);
+                System.out.println(name + " "+ state + " "+ city+ " "+address+ " "+zip);
+             }
 //            try{
 ////                gsm.editGroceryStore(idd,userId,name,state,city,address,zip);
 //            }catch(SQLException e){
@@ -140,14 +140,51 @@ public class GroceryStoreServlet extends HttpServlet {
             dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/editGroceryStore.jsp");
             dispatcher.forward(request, response);
 
+        }
+        else if(request.getParameter("edit_store")!= null){
+            //edit a specific store
+            System.out.println("specific edit");
+            try{
+                String name = "";
+                String state = "";
+                String address = "";
+                String zip  =  "";
+                String city =  "";
+                
+                if(request.getParameter("store_name")!="" && request.getParameter("state")!= "" && request.getParameter("city")!=""
+                        && request.getParameter("address")!="" && request.getParameter("zip")!="" ){
+                    name = request.getParameter("store_name");
+               
+                    state= request.getParameter("state");
+                
+                    city = request.getParameter("city");
+                    
+                    address = request.getParameter("address");
+                    
+                    zip = request.getParameter("zip");
+                    
+                     String id = (String)session.getAttribute("store_id");
+
+                    int idd = Integer.parseInt(id);
+                    
+                    System.out.println(name + " "+ state + " "+ city+ " "+address+ " "+zip);
+                    gsm.editGroceryStore(idd,userId,name,state,city,address,zip);
+                    
+                    dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
+                    dispatcher.forward(request, response);
+                }else{
+                    request.setAttribute("empty_field", new Boolean(true));
+                    dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
+                    dispatcher.forward(request, response);
+                }
+            }
+            catch(SQLException e){
+                System.out.println(e);
+            }
         }else{
-            
             dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
-         
             dispatcher.forward(request, response);
          }
-            
-            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

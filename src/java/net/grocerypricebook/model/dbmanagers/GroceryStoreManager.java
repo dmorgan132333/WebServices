@@ -76,8 +76,7 @@ public class GroceryStoreManager {
             
             rs = stmt.executeQuery(query);
             while(rs.next()){
-                gsl.add(new GroceryStore(rs.getInt("id"),rs.getString("name"),rs.getString("address"),rs.getString("state"),rs.getString("city"),rs.getInt("zip"),rs.getInt("user_id")));
-                
+                gsl.add(new GroceryStore(rs.getInt("id"),rs.getString("name"),rs.getString("state"),rs.getString("city"),rs.getString("address"),rs.getInt("zip"),rs.getInt("user_id")));
             }
             con.close();
         } catch (SQLException e){
@@ -120,16 +119,10 @@ public class GroceryStoreManager {
 		Connection con;
 		Statement stmt;
 		String query;
-//                editGroceryStore(Integer.parseInt(id),userId);
 		try{
-                    con = JDBCUtilities.getConnection();
-                    stmt = con.createStatement();
-                    query = "DELETE FROM grocery_stores WHERE id= \"" + store_id + "\" AND user_id = \"" +user_id +"\"";
-                    stmt.executeUpdate(query);
-                   
 			con = JDBCUtilities.getConnection();
 			stmt = con.createStatement();
-			query = "INSERT INTO grocery_stores(name,address,state,city,zip,user_id) VALUES(\"" + name + "\", \"" + address + "\",\"" + state + "\",\"" + city + "\",\"" + zipp + "\",\"" + user_id + "\")";
+			query = "UPDATE grocery_stores SET name = \""+name+"\",state = \""+state+"\",city = \""+city+"\",address = \""+address+"\",zip = \""+zipp+"\" WHERE id= \"" + store_id + "\" AND user_id = \"" +user_id +"\"";
 			stmt.executeUpdate(query);
 			con.close();
 		} catch (SQLException e){
