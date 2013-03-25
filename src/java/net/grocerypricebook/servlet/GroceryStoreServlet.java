@@ -67,6 +67,10 @@ public class GroceryStoreServlet extends HttpServlet {
                 
                
                     zip = request.getParameter("zip");
+                    session.setAttribute("empty_field", "");
+                     gsm.addNewGroceryStore(userId,name,state,city,address,zip);
+                dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
+                dispatcher.forward(request, response);
                 }else{
                     System.out.println("else statment");
                     session.setAttribute("empty_field", "One or more Fields are empty!");
@@ -74,9 +78,7 @@ public class GroceryStoreServlet extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
 //                int userID, String name,String state,String city,String address,int zip
-                gsm.addNewGroceryStore(userId,name,state,city,address,zip);
-                dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/groceryStore.jsp");
-                dispatcher.forward(request, response);
+               
             }
             catch(SQLException e){
                 System.out.println(e);
@@ -84,10 +86,11 @@ public class GroceryStoreServlet extends HttpServlet {
            
         }else if(request.getParameter("delete_store") != null){
              String id = "";
+             session.setAttribute("empty_field", "");
             if(request.getParameter("store_id")!=""){
                id = request.getParameter("store_id");
             
-            System.out.println("deleteing store " + id +" " + userId);
+                System.out.println("deleteing store " + id +" " + userId);
             try{
                 gsm.deleteGroceryStore(Integer.parseInt(id),userId);
             }catch(SQLException e){

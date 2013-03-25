@@ -20,7 +20,7 @@
         <h1>Grocery Store Data</h1>
         <h2><a href="welcome.jsp">Home</a></h2> 
         
-        <% if(session.getAttribute("empty_field")!=null){%>
+        <% if(session.getAttribute("empty_field")!= ""){%>
         <font color="red"><%=session.getAttribute("empty_field")%></font>
         <%}%>
         <form action="GroceryStoreServlet" method="GET">
