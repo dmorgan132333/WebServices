@@ -64,7 +64,7 @@
 		<select name="parent_id">
 			<option value="0">No parent</option>
 			<% for(Item i: items) { %>
-				<option value="<%= i.getId() %>"><%= i.getName() %></option>
+				<option value="<%= i.getId() %>"><%= i.getFullName() %></option>
 			<% } %>
 	        </select>
 
@@ -78,8 +78,10 @@
 			}
 		   }
 		   
-		   out.print("Category " + (numCats + 1) + ": ");
-		   if(addCat) printSelectCats(cats, -1, out);
+		   if(addCat){ 
+			   out.print("Category " + (numCats + 1) + ": ");
+			   printSelectCats(cats, -1, out);
+		   }
 		%>
 		<input type="submit" name="add_cat" value="Add Additional Category" />
 

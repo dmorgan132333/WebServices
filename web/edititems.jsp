@@ -38,8 +38,8 @@
 		<h1>Edit Items</h1>
 		<h2><a href="welcome.jsp">Home</a></h2>
 		<% for(Item i: items) { %>
-			<%= i.getName() %><br/>
+			<%= i.getFullName() %><br/>
 		<% } %>
-		<a href="additem.jsp">Add Item</a>
+		<br/><a href="additem.jsp">Add Item</a>
 	</body>
 </html>

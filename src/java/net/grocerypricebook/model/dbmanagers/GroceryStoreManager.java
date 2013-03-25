@@ -72,13 +72,10 @@ public class GroceryStoreManager {
          try{
             con = JDBCUtilities.getConnection();
             stmt = con.createStatement(); 
-//            query = "INSERT INTO users(login, password) VALUES(\"" + name + "\", \""+password+"\")";
-//            query = "INSERT INTO shopping_lists VALUES(\"" + userID + "\")";
             query = "SELECT id,name,address,state,city,zip,user_id FROM grocery_stores";
             
             rs = stmt.executeQuery(query);
             while(rs.next()){
-//                String name,String state,String city,String address,int store_id,int user_id
                 gsl.add(new GroceryStore(rs.getInt("id"),rs.getString("name"),rs.getString("address"),rs.getString("state"),rs.getString("city"),rs.getInt("zip"),rs.getInt("user_id")));
                 
             }
@@ -90,6 +87,34 @@ public class GroceryStoreManager {
         
         return gsl;
     }
+
+    public ArrayList<GroceryStore> getStores(int userId)throws SQLException{
+        ArrayList<GroceryStore> gsl = new ArrayList<GroceryStore>();
+        
+        Connection con;
+        Statement stmt;
+        String query;
+        ResultSet rs;
+        
+         try{
+            con = JDBCUtilities.getConnection();
+            stmt = con.createStatement(); 
+            query = "SELECT id,name,address,state,city,zip,user_id FROM grocery_stores WHERE (user_id = 1 OR user_id = " + userId + ")";
+            
+            rs = stmt.executeQuery(query);
+            while(rs.next()){
+                gsl.add(new GroceryStore(rs.getInt("id"),rs.getString("name"),rs.getString("address"),rs.getString("state"),rs.getString("city"),rs.getInt("zip"),rs.getInt("user_id")));
+                
+            }
+            con.close();
+        } catch (SQLException e){
+            System.out.println(e); 
+            throw e;
+        }
+        
+        return gsl;
+    }
+
     public void editGroceryStore(int store_id, int user_id, String name,String state,String city,String address,String zip)throws SQLException{
         int zipp = Integer.parseInt(zip);
 		Connection con;

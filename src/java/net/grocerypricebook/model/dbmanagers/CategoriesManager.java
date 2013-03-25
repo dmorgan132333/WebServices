@@ -312,11 +312,22 @@ public class CategoriesManager {
 		return combo_id;
 	}
 
-	/*
-	public ArrayList<Item> getItemsInCategory(int categoryId){
+	/**
+	 * Returns the categories belonging to combo_id.
+	 * @param comboId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ArrayList<Category> getCategoriesInCombo(int comboId) throws SQLException, CategoryNotFoundException{
 		Connection con = JDBCUtilities.getConnection();
 		Statement stmt = con.createStatement();
-		String query = "SELECT  "
-	}*/
-
+		String query = "SELECT category_id FROM category_combo_entries WHERE combo_id = " + comboId;
+		ResultSet rs = stmt.executeQuery(query);
+		ArrayList<Category> categories = new ArrayList<Category>();
+		while(rs.next()){
+			categories.add(getCategory(rs.getInt(1)));
+		}
+		con.close();
+		return categories;
+	}
 }

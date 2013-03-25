@@ -1,6 +1,11 @@
 package net.grocerypricebook.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
+import net.grocerypricebook.model.dbmanagers.ItemManager;
+import net.grocerypricebook.model.exceptions.CategoryNotFoundException;
+import net.grocerypricebook.model.exceptions.ItemNotFoundException;
 
 /**
  * Represents an entry in the items table.
@@ -13,6 +18,9 @@ public class Item {
 	private String name;
 	private int categoryComboId;
 	private ArrayList<Integer> categories;
+
+	private ItemManager itemMan = new ItemManager();
+	private CategoriesManager catMan = new CategoriesManager();
 
 	/**
 	 * @return the id
@@ -87,7 +95,7 @@ public class Item {
 	/**
 	 * @return the category_combo_id
 	 */
-	public int getCategoryComboCd() {
+	public int getCategoryComboId() {
 		return categoryComboId;
 	}
 
@@ -96,6 +104,33 @@ public class Item {
 	 */
 	public void setCategoryComboId(int categoryComboId) {
 		this.categoryComboId = categoryComboId;
+	}
+
+	public String getFullName() throws SQLException, ItemNotFoundException, CategoryNotFoundException{
+		Item parent;
+		if(parentId != 0){
+			parent = itemMan.getItem(this.parentId);
+		} else {
+			parent = null;
+		}
+		ArrayList<Category> categories = catMan.getCategoriesInCombo(categoryComboId);
+		String catString = "";
+
+		for(int i = 0; i < categories.size(); i++){
+			if(i == categories.size() - 1){
+				catString += categories.get(i).getName();
+			}
+			else{
+				catString += categories.get(i).getName() + ", ";
+			}
+		}
+
+		if(parent == null){
+			return name + ": " + catString;
+		}
+		else{
+			return parent.getName() + ", " + name + ": " + catString;
+		}
 	}
 
 }

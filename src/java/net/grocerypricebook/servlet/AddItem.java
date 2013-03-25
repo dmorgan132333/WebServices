@@ -18,7 +18,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import net.grocerypricebook.model.Category;
+import net.grocerypricebook.model.Item;
+import net.grocerypricebook.model.dbmanagers.CategoriesManager;
 import net.grocerypricebook.model.dbmanagers.ItemManager;
+import net.grocerypricebook.model.exceptions.CategoryNotFoundException;
 import net.grocerypricebook.model.exceptions.ItemNotFoundException;
 
 /**
@@ -48,6 +52,7 @@ public class AddItem extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 		ItemManager itemMan = new ItemManager();
+		CategoriesManager catMan = new CategoriesManager();
 		HttpSession session = request.getSession();
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/additem.jsp"); //Default dispatch.
 		if(request.getParameter("add_cat") != null){
@@ -60,11 +65,33 @@ public class AddItem extends HttpServlet {
 			ArrayList<String> catStrArr = new ArrayList<String>(Arrays.asList(catsStr));
 			ArrayList<Integer> cats = new ArrayList<Integer>();
 
+			ArrayList<Integer> parentCats = new ArrayList<Integer>();
+			if(parentId != 0){
+				try {
+					Item parent = itemMan.getItem(parentId);
+					for(Category cat: catMan.getCategoriesInCombo(parent.getCategoryComboId())){
+						parentCats.add(cat.getCatId());
+					}
+				} catch (SQLException ex) {
+					Logger.getLogger(AddItem.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (CategoryNotFoundException ex) {
+					Logger.getLogger(AddItem.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (ItemNotFoundException ex){
+					Logger.getLogger(AddItem.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+
 			for(String str: catStrArr){
 				int val = Integer.parseInt(str);
 				if(val != 0){
 					cats.add(val);
 				}
+			}
+
+			//Make sure the child categories contains the parent categories.
+			for(Integer catId: parentCats){
+				if(!cats.contains(catId))
+					cats.add(catId);
 			}
 
 			try {

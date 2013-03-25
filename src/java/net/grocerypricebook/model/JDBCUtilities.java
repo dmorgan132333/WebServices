@@ -28,6 +28,7 @@ public class JDBCUtilities {
 	
 	public static Connection getConnection() throws SQLException {
 		if(connectionPool == null){
+			System.out.println("Initializing connection pool.");
 			try {
 				// load the database driver (make sure this is in your classpath!)
 				Class.forName("com.mysql.jdbc.Driver");
