@@ -43,7 +43,7 @@ public class JDBCUtilities {
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
 			config.setPartitionCount(4);
-			config.setIdleConnectionTestPeriodInSeconds(15);
+			config.setIdleConnectionTestPeriodInSeconds(10);
 			config.setConnectionTestStatement("/* ping */ SELECT 1");
 			connectionPool = new BoneCP(config); // setup the connection pool
 			
